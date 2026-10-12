@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Fullstack Developer Portfolio</title>
+    <meta
+      name="description"
+      content="Fullstack developer building interfaces and the APIs behind them, from the first query to the last animation frame."
+    />
+    <link rel="canonical" href="https://example.com/" />
+    <meta name="theme-color" content="#0F172A" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Fullstack Developer" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Fullstack Developer Portfolio" />
+    <meta
+      property="og:description"
+      content="Fullstack developer building interfaces and the APIs behind them, from the first query to the last animation frame."
+    />
+    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:site_name" content="Fullstack Developer Portfolio" />
+    <meta property="og:image" content="https://example.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Fullstack Developer Portfolio" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Fullstack Developer Portfolio" />
+    <meta
+      name="twitter:description"
+      content="Fullstack developer building interfaces and the APIs behind them, from the first query to the last animation frame."
+    />
+    <meta name="twitter:image" content="https://example.com/og-image.png" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!--
+      Preload only the two display/body faces used above the fold (latin subset).
+      The raw @fontsource-variable source paths below are resolved and rewritten
+      to hashed /assets/*.woff2 URLs by Vite's HTML asset pipeline at build time
+      (verified: both return HTTP 200 with woff2 magic bytes in dist/). Do not
+      hand-edit the built paths. If a future Vite version stops rewriting these
+      source hrefs, drop the two tags: the @fontsource CSS already declares every
+      @font-face with font-display: swap, so fonts still load on first use.
+    -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="/node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2"
+    />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
