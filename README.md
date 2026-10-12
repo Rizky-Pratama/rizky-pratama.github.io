@@ -489,3 +489,13 @@ as-is) to disable Jekyll processing entirely. Deploy either by pushing `dist/` t
 radius, easing, the three dials, section-by-section layout, and the motion budget.
 `PLAN-REVIEW.md` is the review that produced it; `REVIEW.md` is the implementation review.
 Read `PLAN.md` before changing visual design.
+
+---
+
+## License
+
+Released under the **MIT License** — see [`LICENSE`](LICENSE) for the full text.
+
+The copyright line in `LICENSE` ships as a placeholder, `Copyright (c) 2026 <your name>`.
+Replace `<your name>` (keeping the `c` year if you like) with your own name or handle before
+you publish, so the notice matches the footer `(c) 2026` line.
