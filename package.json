@@ -23,6 +23,7 @@
     "images": "node scripts/gen-images.mjs",
     "icons": "node scripts/gen-icons.mjs",
     "audit": "node audit/scripts/run-audit.mjs",
+    "check:placeholders": "node scripts/check-placeholders.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",

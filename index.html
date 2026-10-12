@@ -42,28 +42,14 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!--
-      Preload only the two display/body faces used above the fold (latin subset).
-      The raw @fontsource-variable source paths below are resolved and rewritten
-      to hashed /assets/*.woff2 URLs by Vite's HTML asset pipeline at build time
-      (verified: both return HTTP 200 with woff2 magic bytes in dist/). Do not
-      hand-edit the built paths. If a future Vite version stops rewriting these
-      source hrefs, drop the two tags: the @fontsource CSS already declares every
-      @font-face with font-display: swap, so fonts still load on first use.
+      Fonts are intentionally NOT preloaded here. Hand-written <link href> paths
+      that point at package source files are not a documented Vite contract:
+      Vite happens to rewrite them today, but relying on that risks shipping a
+      bare source URL (a production 404) after any Vite upgrade. Instead
+      src/style.css @imports the @fontsource-variable CSS, whose @font-face
+      rules carry font-display: swap and hashed /assets/*.woff2 URLs, so the
+      fonts load on first use with no manual tags to go stale.
     -->
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      crossorigin
-      href="/node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2"
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      crossorigin
-      href="/node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2"
-    />
   </head>
   <body>
     <div id="app"></div>

@@ -162,14 +162,33 @@ would rather not ship a CV, either delete the button's entry in
 
 - `public/og-image.png` is the real 1200x630 social share card (also `og-image.svg` source).
 - `public/favicon.svg` and `public/apple-touch-icon.png` are the site icons.
-- `index.html` and `src/style.css` preload two font files from
-  `node_modules/@fontsource-variable/*`. Do not hand-edit those preload hrefs — Vite
-  rewrites them to hashed `/assets/*.woff2` URLs at build time.
+- Fonts are **self-hosted via [`@fontsource-variable`](https://fontsource.org/)** and loaded
+  through `@import '@fontsource-variable/*/wght.css'` in `src/style.css` (three faces:
+  space-grotesk, ibm-plex-sans, jetbrains-mono). Those CSS `@font-face` rules carry
+  `font-display: swap`, and Vite rewrites the packaged `.woff2` URLs to hashed
+  `/assets/*.woff2` paths at build time. There is **no manual `<link rel="preload">` tag to
+  keep in sync** — `index.html` intentionally preloads nothing.
 
 ### 7. `<title>` and meta description
 
 `index.html` carries a neutral `<title>` and `meta name="description"` /
 `meta name="author"`. Update them with your own once your name and positioning are set.
+
+### 8. Publishing checklist — `npm run check:placeholders`
+
+Once you have worked through the sections above, let the guard confirm nothing was missed:
+
+```bash
+npm run check:placeholders   # scans index.html, src/, public/robots.txt,
+                             # public/sitemap.xml and LICENSE
+```
+
+It reports every remaining `example.com`, `your-handle`, `<your name>` (the `LICENSE`
+holder), `{AVAILABILITY}` / `{YEARS}` token, and an empty `site.name` as
+`file:line: pattern`, exiting **non-zero** until they are all replaced — so it drops
+straight into a pre-publish or CI step. To ship the demo content on purpose, run
+`ALLOW_PLACEHOLDERS=1 npm run check:placeholders`; it prints the same findings as
+warnings and exits 0.
 
 ---
 
@@ -272,7 +291,7 @@ The audit writes screenshots to `audit/shots/` and a machine-readable report to
 
 ```
 portofoio/
-|-- index.html                 # SEO/OG/Twitter meta, font preloads, #app mount
+|-- index.html                 # SEO/OG/Twitter meta, #app mount
 |-- vite.config.js             # vue() + tailwindcss() plugins
 |-- package.json               # scripts + installed deps
 |-- README.md
@@ -385,6 +404,9 @@ npm run format:check  # Prettier — verifies style, writes nothing
 npm run build         # Vite production build — must exit 0
 ```
 
+Publishing a portfolio also means having replaced the demo content — `npm run
+check:placeholders` is the pre-publish guard for exactly that (see below).
+
 - **`npm test`** runs Vitest (`vitest run`) over 4 files / 45 tests. It covers the content
   **contract** (`src/data/site.contract.test.js` — the shape of `site.js`, that every chip
   slug has a matching `public/icons/<slug>.svg`, and a no-em-dash guard), the GSAP motion
@@ -403,6 +425,11 @@ npm run build         # Vite production build — must exit 0
   and fails on any unformatted file; `npm run format` normalizes the tree so the check
   passes.
 - **`npm run build`** remains the end-to-end gate: it must exit 0 and emit `dist/`.
+- **`npm run check:placeholders`** scans the publishable source (`index.html`, `src/`,
+  `public/robots.txt`, `public/sitemap.xml`, `LICENSE`) for the demo placeholders —
+  `example.com`, `your-handle`, `<your name>`, the `{AVAILABILITY}` / `{YEARS}` tokens, and
+  an empty `site.name`. It must exit 0 before you publish. See
+  [Publishing checklist](#8-publishing-checklist--npm-run-checkplaceholders).
 
 These four are the checks a contributor should run; `npm test && npm run lint && npm run
 format:check && npm run build` is the whole gate. The maintainer scripts (`images`, `icons`,
