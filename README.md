@@ -422,8 +422,9 @@ Upload `dist/` to any static host — Netlify, Vercel, Cloudflare Pages, GitHub 
 CloudFront, nginx, etc. Because the site is a single page with no client router, **no SPA
 rewrite rule is needed**.
 
-- Set cache headers long/immutable on the hashed `/assets/*` (and any `/fonts/*`), short on
-  `index.html`.
+- Set cache headers long/immutable on the hashed `/assets/*`, `/icons/*`, `/images/*`, short
+  on `index.html`. Fonts are emitted as hashed `*.woff2` files under `/assets/` — there is no
+  separate `/fonts/*` directory.
 - Build requires Node >= 20.19 on the host's build image.
 
 Two host config files are committed, both matching the real build output (build command
