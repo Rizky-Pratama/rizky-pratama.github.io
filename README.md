@@ -13,6 +13,10 @@ The content is **de-identified on purpose**. No name, gender, city, or invented 
 hard-coded anywhere in the UI. Every swappable value is a placeholder pointing at one
 data file (`src/data/site.js`). See [What to replace](#what-to-replace).
 
+> **For AI agents / contributors:** `AGENTS.md` (tool-agnostic) and `CLAUDE.md`
+> (Claude-specific) describe this project's conventions and commands for automated
+> assistants.
+
 ---
 
 ## Requirements
