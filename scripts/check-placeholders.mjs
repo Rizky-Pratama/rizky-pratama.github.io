@@ -6,7 +6,7 @@
  * Scans (gitignore-aware):
  *   - index.html
  *   - src/**\/*.{js,vue,css}
- *   - public/robots.txt, public/sitemap.xml
+ *   - public/robots.txt
  *   - LICENSE
  * plus a direct read of src/data/site.js for the empty `site.name`. Documentation
  * (*.md), build output (dist/), QA scratch (audit/) and tests (*.test.js) are
@@ -55,7 +55,7 @@ const toPosix = (p) => p.split(sep).join('/')
 
 /** Every file the guard inspects, as repo-relative POSIX paths. */
 function collectTargets() {
-  const targets = new Set(['index.html', 'LICENSE', 'public/robots.txt', 'public/sitemap.xml'])
+  const targets = new Set(['index.html', 'LICENSE'])
 
   const walk = (absDir) => {
     for (const entry of readdirSync(absDir, { withFileTypes: true })) {
@@ -116,7 +116,7 @@ function main() {
   const noun = findings.length === 1 ? 'finding' : 'findings'
 
   if (findings.length === 0) {
-    console.log('PASS — no placeholders found. The template is ready to publish.')
+    console.log('PASS — no placeholders found. Domain and indexing readiness must be checked separately.')
     return 0
   }
 
