@@ -26,6 +26,7 @@
     "check:placeholders": "node scripts/check-placeholders.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
+    "watch:popups": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/watch-console-popups.ps1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
