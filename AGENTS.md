@@ -14,11 +14,11 @@ agree.
   a fixed nav and a mono-meta footer.
 - **No client-side router** — the whole site is anchor links on one page.
 - **No contact form** — by design. The primary CTA is `mailto:` plus external links.
-- The content is **de-identified on purpose**: no name, gender, city, or invented tenure is
-  hard-coded in the UI. Every swappable value is a placeholder in one data file
+- The content is **personalized for Muhammad Rizky Pratama**. Identity and factual copy
+  are configured in one data file
   (`src/data/site.js`).
 
-It is a template to be cloned and re-styled, not a content-complete site.
+The original template is now personalized. README.md describes preview-only SEO and the optional CV download.
 
 ## Requirements
 
@@ -49,7 +49,7 @@ Pre-publish guard:
 
 ```bash
 npm run check:placeholders   # scans index.html, src/, public/robots.txt,
-                             # public/sitemap.xml and LICENSE for leftover
+                             # LICENSE (the sitemap is deferred until the final URL is known) for leftover
                              # placeholder values (example.com, your-handle,
                              # {AVAILABILITY}, {YEARS}, empty site.name).
                              # Exits NON-ZERO until they are all replaced.
@@ -61,7 +61,7 @@ Maintainer-only tooling (not needed to develop, build, or deploy):
 
 ```bash
 npm run images     # regenerate public/images/*.webp from scripts/gen-images.mjs (deterministic, offline)
-npm run icons      # regenerate public/icons/*.svg chips from scripts/gen-icons.mjs (deterministic, offline)
+npm run icons      # regenerate Iconify registry, site icons, and notices (deterministic, offline)
 npm run audit      # optional visual audit; requires playwright + a running `npm run preview`,
                    # and the gitignored local audit/ harness (absent on a fresh clone)
 ```
@@ -83,7 +83,7 @@ npm run audit      # optional visual audit; requires playwright + a running `npm
 - **ALL content lives in `src/data/site.js`.** `App.vue` passes those values into the
   section components as props. Components hold no copy.
 - **Local assets only** — images, icons, and fonts are committed / self-hosted
-  (`public/images/*.webp`, `public/icons/*.svg`, `@fontsource-variable/*`). No runtime CDN
+  (`public/images/*.webp`, `src/data/icons.js`, `@fontsource-variable/*`). No runtime CDN
   or Google Fonts request.
 
 ## Design law

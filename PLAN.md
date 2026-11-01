@@ -1,3 +1,15 @@
+## Approved Iconify migration
+
+All app icons now render with AppIcon and the offline Iconify Vue component, using a committed subset registry. UI icons use Phosphor, technology logos use Iconify collections in currentColor, and the favicon/apple-touch icon use green code on navy. npm run icons regenerates these assets locally, with licenses. This supersedes the original Simple Icons SVG-chip pipeline described below. No runtime icon CDN/API requests are permitted.
+
+## Approved image viewer and SEO update
+
+Project images now use full screenshots, descriptive alt text, and a native-dialog image-only viewer; screenshot parallax is removed. The original no-project-detail-overlay rule remains. Hero and About portraits support a 1.02 hover scale with 200ms easing for fine pointers, disabled under reduced motion. About uses a generated three-quarter portrait; Hero retains the original photo. SEO metadata, robots and sitemap are built from shared content and explicit URL/indexability settings. Visual tokens and section order remain locked.
+
+# Personalization update ? November 2026
+
+The approved personalization plan replaces the demo content and neutral identity with Muhammad Rizky Pratama, Full Stack Developer. The original visual rules below remain authoritative. Skills have variable item counts; project artwork is decorative; public source links are optional; the CV download is hidden without a URL. Preview indexing is disabled until a final domain is configured. All editable content remains in `src/data/site.js`. Original demo copy below is historical reference.
+
 # PLAN.md - Fullstack Developer Portfolio (Vue 3 + Tailwind v4 + GSAP)
 
 **Version: v2 (FINAL LOCKED)** - supersedes v1 (797-line draft), which was rejected by `PLAN-REVIEW.md`.

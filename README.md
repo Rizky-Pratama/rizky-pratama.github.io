@@ -1,3 +1,25 @@
+# Muhammad Rizky Pratama Portfolio
+
+English portfolio for a Full Stack Developer focused on Laravel, Vue, MySQL, APIs, and PHPUnit. Editable content lives in `src/data/site.js`. The existing dark visual system and section order are preserved.
+
+## Current personalized configuration
+
+All application icons use `AppIcon` with `@iconify/vue/offline`. Names are configured in `src/data/site.js`; only used data is committed in `src/data/icons.js`. UI icons use Phosphor and technology logos remain monochrome. Run `npm run icons` after changing icon names. This deterministic offline command also regenerates favicon, apple-touch icon, and license notices. The browser never calls Iconify APIs. See [icon sources and licenses](docs/icon-licenses.md).
+
+
+- Hero and About use the local `public/images/my-foto.webp` photo.
+- Project screenshots show their full aspect ratios and open in a keyboard-accessible image viewer with zoom. The About portrait is generated from the original photo, with restrained portrait hover motion.
+- Four case studies distinguish paid maintenance, personal use, KKP, and thesis work. Project screenshots include descriptive alternative text. Only public projects have source links.
+- Skills support unequal group sizes; every configured technology currently has a local Iconify logo. Run `npm run icons` after updating the local icon inventory.
+- The CV download is hidden while `sections.contact.secondary.href` is empty. Add a public-ready PDF and set this URL to enable it. The internal master CV is not published.
+- SEO metadata and robots.txt are generated at build time from portfolio data. See [the SEO audit](docs/seo-audit.md) for findings, image-generation prompts, and SITE_URL / SITE_INDEXABLE settings.
+- No final domain is configured. This preview is marked `noindex, nofollow`; robots disallows crawling. Canonical, absolute social-image URLs, and sitemap are omitted. Before publishing, configure the final URL, restore indexing, add a sitemap and robots reference, and enable the social-image metadata.
+- `npm test`, `npm run lint`, `npm run format:check`, `npm run build`, and `npm run check:placeholders` are the quality gates. The placeholder check does not certify domain or indexing readiness.
+
+## Original template reference
+
+The following material documents the original template, its design tokens, and cloning workflow. Its demo content, fixed skill counts, placeholder CV, domain settings, and neutral identity descriptions are historical; the personalized configuration above takes precedence.
+
 # Fullstack Developer Portfolio
 
 A single-page developer portfolio built with **Vue 3.5 + Vite 8 + Tailwind v4 + GSAP 3**.
@@ -55,7 +77,7 @@ site:
 
 ```bash
 npm run images     # regenerate public/ image assets from scripts/gen-images.mjs
-npm run icons      # regenerate public/icons/*.svg chips from scripts/gen-icons.mjs
+npm run icons      # regenerate offline Iconify registry, favicon, and license notices
 npm run audit      # optional visual audit (requires playwright + a running preview)
 ```
 
@@ -211,7 +233,7 @@ Only five packages end up in the shipped bundle path:
 | **Dev-only** (`devDependencies`) | `vite`, `@vitejs/plugin-vue`, `@tailwindcss/vite`, `tailwindcss` | Build toolchain. Nothing here ships to `dist/` as a dependency. |
 | **Dev-only, optional tooling** | `sharp`, `playwright`, `simple-icons` | Used only by the maintainer scripts below. Safe to omit from a lean install (e.g. `npm install --omit=dev` for a build-only CI, or `--omit=optional` isn't needed since these are regular devDeps). |
 
-`sharp`, `simple-icons`, and `playwright` are intentionally **devDependencies, not
+`sharp`, Iconify collection packages, and `playwright` are intentionally **devDependencies, not
 runtime**: the built site is a fully static bundle that needs none of them at runtime.
 `npm install` does not download Playwright's browser binaries — those are fetched
 separately via `npx playwright install` into a user-level cache, so a plain install stays
@@ -246,27 +268,13 @@ part of `npm run build` — the artwork is pre-generated and committed.
 > the file directly (or edit `public/og-image.svg` and rasterize it yourself with any
 > tool); `npm run images` will not touch them.
 
-### Regenerating chip icons — `npm run icons`
+### Regenerating Iconify data and site icons
 
-The tech-stack chip logos rendered by the Skills bento are committed local SVGs in
-`public/icons/{slug}.svg` — 20 files, one per chip. They are **not** fetched from a CDN at
-runtime:
+Run `npm run icons` after updating icon names in `src/data/site.js`. It reads installed `@iconify-json/*` packages locally and writes only the used subset to `src/data/icons.js`. Full collections are development-only inputs and are not bundled for the browser.
 
-```bash
-npm run icons      # node scripts/gen-icons.mjs
-```
+The command also generates `public/favicon.svg`, `public/apple-touch-icon.png`, `docs/icon-licenses.md`, and the distributed `public/icon-licenses.txt`. License texts are cached in `scripts/icon-licenses/`, so regeneration never needs network access. Commit all regenerated outputs.
 
-That script reads the official `simple-icons` package (a devDependency) and writes one
-tinted SVG per slug. It is **deterministic and offline** — no network access, and
-re-running it reproduces byte-identical output. Commit the regenerated SVGs. As with the
-images, it is not part of `npm run build`; the icons are pre-generated and committed so the
-deployed site makes no third-party request for them.
-
-**Adding a new chip:** add the company/tech slug to the relevant
-`site.sections.skills.groups[].stack[]` entry in `src/data/site.js` **and** run
-`npm run icons` so the matching `public/icons/<slug>.svg` exists (or drop a hand-made SVG
-of the same name into `public/icons/`). A slug with no matching file renders a broken chip,
-so keep the two in step.
+**Adding a chip:** set its `icon` to a complete name such as `simple-icons:react`, then run the generator. For a new collection, install its `@iconify-json` package and add its license text to the local license cache. Missing configured icon data fails generation and contract tests. The shared `AppIcon` component uses `@iconify/vue/offline`; it never fetches missing icons.
 
 ### Optional visual audit — `npm run audit`
 
@@ -413,7 +421,7 @@ check:placeholders` is the pre-publish guard for exactly that (see below).
 
 - **`npm test`** runs Vitest (`vitest run`) over 4 files / 45 tests. It covers the content
   **contract** (`src/data/site.contract.test.js` — the shape of `site.js`, that every chip
-  slug has a matching `public/icons/<slug>.svg`, and a no-em-dash guard), the GSAP motion
+  Iconify name has matching offline registry data, and a no-em-dash guard), the GSAP motion
   **presets** (`src/composables/useGsap.test.js` — easing, duration, stagger), and
   **component smoke tests** that mount every section (`src/components/sections.smoke.test.js`)
   plus the UI primitives (`src/components/ui.test.js`). It runs under **jsdom**
