@@ -1,0 +1,64 @@
+{
+  "name": "portofoio",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Single-page dark developer portfolio template built with Vue 3, Vite, Tailwind CSS v4 and GSAP (no router).",
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "vite",
+    "tailwindcss",
+    "gsap",
+    "portfolio",
+    "template"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "images": "node scripts/gen-images.mjs",
+    "icons": "node scripts/gen-icons.mjs",
+    "audit": "node audit/scripts/run-audit.mjs",
+    "check:placeholders": "node scripts/check-placeholders.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "watch:popups": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/watch-console-popups.ps1",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@fontsource-variable/ibm-plex-sans": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@iconify/vue": "^5.0.4",
+    "gsap": "^3.15.0",
+    "vue": "^3.5.42"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@iconify-json/file-icons": "^1.2.2",
+    "@iconify-json/hugeicons": "^1.2.35",
+    "@iconify-json/ph": "^1.2.2",
+    "@iconify-json/simple-icons": "^1.2.101",
+    "@iconify/utils": "^3.1.7",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.11.1",
+    "jsdom": "^30.1.2",
+    "playwright": "^1.64.0",
+    "prettier": "^3.9.10",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.3"
+  }
+}

@@ -1,0 +1,32 @@
+# Build output
+dist/
+dist-ssr/
+
+# Dependencies
+node_modules/
+
+# Generated / asset blobs (icons, images)
+public/
+
+# QA scratch output (screenshots, reports, audit scripts)
+audit/
+
+# Design-system reference material
+design-system/
+
+# Tooling scripts (not part of the app style surface)
+scripts/
+
+# Test files + test bootstrap (owned by the test workstream)
+*.test.js
+src/test/
+
+# Lockfiles + logs
+package-lock.json
+*.log
+
+# Docs owned by humans (not machine-formatted)
+*.md
+
+# Local editor / OS noise
+.DS_Store

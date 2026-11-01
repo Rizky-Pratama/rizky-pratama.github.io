@@ -1,0 +1,254 @@
+/* ===========================================================================
+ * portofoio - style.css
+ * Vue 3 + Tailwind v4 (CSS-first). Imported by src/main.js.
+ *
+ * THEME LOCK: dark-only. There is deliberately NO `@custom-variant dark`
+ * and NO light palette. Every token below IS the dark value, `color-scheme`
+ * is pinned to `dark`, and no section inverts. This is a recorded decision
+ * (see PLAN.md Section 0, finding P0-3), not an omission. If a light mode is
+ * ever wanted it must be reintroduced intentionally as a variant + token set.
+ * =========================================================================== */
+
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+ * Self-hosted variable fonts (packaged woff2, hashed by Vite).
+ * @fontsource-variable/* ships @font-face rules with font-display: swap and
+ * the full wght axis, so we do not hand-roll @font-face here.
+ * ------------------------------------------------------------------------- */
+@import '@fontsource-variable/space-grotesk/wght.css';
+@import '@fontsource-variable/ibm-plex-sans/wght.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
+/* ---------------------------------------------------------------------------
+ * Design tokens, exposed to Tailwind v4 as utilities.
+ *   Colors:  bg-surface, text-fg-muted, border-border, text-accent, ...
+ *   Fonts:   font-display, font-body, font-mono
+ *   Radius:  rounded-xs / rounded-sm / rounded-md
+ *   Easing:  ease-out-strong / ease-in-out-strong / ease-drawer
+ *   Durations are plain custom props (Tailwind has no duration-* theme
+ *   namespace for arbitrary ms tokens; consume via var(--dur-*) or the
+ *   built-in duration-* utilities).
+ *
+ * NOTE ON RADIUS: `--radius-xs|sm|md` override Tailwind's built-in radius
+ * scale (defaults 0.125 / 0.25 / 0.375rem) PROJECT-WIDE, by intent. So
+ * `rounded-md` now means 12px everywhere. This is deliberate.
+ * ------------------------------------------------------------------------- */
+@theme {
+  /* Palette - dark-only, single accent */
+  --color-bg: #0f172a;
+  --color-surface: #151e33;
+  --color-surface-2: #1e293b;
+  --color-border: #243049;
+  --color-fg: #f1f5f9;
+  --color-fg-muted: #94a3b8;
+  --color-accent: #22c55e;
+  --color-accent-press: #16a34a;
+  --color-on-accent: #052e16;
+  --color-danger: #f87171;
+
+  /* Typography */
+  --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-body:
+    'IBM Plex Sans Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Radius (overrides built-ins on purpose) */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+
+  /* Easing - the only four curves allowed on the page */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Motion tokens that are not a Tailwind theme namespace. */
+:root {
+  --dur-press: 160ms;
+  --dur-pop: 200ms;
+  --dur-modal: 250ms;
+  --dur-reveal: 600ms;
+
+  /* Z-index scale - documented, no arbitrary z-50 */
+  --z-base: 0;
+  --z-pin: 30;
+  --z-sticky: 40;
+  --z-nav-panel: 60;
+  --z-skip: 1000;
+}
+
+/* ---------------------------------------------------------------------------
+ * Base layer
+ * ------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    /* Dark-only: pin the UA color scheme so form controls, scrollbars and
+     * canvas default correctly. */
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    line-height: 1.65;
+  }
+
+  /* Fixed 68px nav offset: every in-page anchor target clears the bar. */
+  [id] {
+    scroll-margin-top: 72px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  /* Visible focus ring, accent, never removed. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Monochrome palette filter for photography. */
+  img {
+    filter: saturate(0.35) contrast(1.05) brightness(0.92);
+  }
+
+  /* Tabular figures for mono readouts / counters. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Respect users who prefer reduced motion. Safety net only: this does not
+   * stop GSAP JS tweens, which are gated in the composable via matchMedia. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Components
+ * ------------------------------------------------------------------------- */
+
+/* Nav scrim: the page's ONE backdrop-filter, and it is a functional
+ * affordance (content is behind the bar), not decoration. Provide a solid
+ * fallback when the user asks for reduced transparency. */
+.nav-scrim {
+  background-color: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .nav-scrim {
+    background-color: var(--color-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Hover MOTION is gated to fine pointers only. Tailwind v4 does not wrap the
+ * `hover:` / `group-hover:` variants in `(hover: hover)` by default, so touch
+ * devices would latch a false hover on tap. Colour-only hovers are harmless,
+ * but transform-based hover motion must be gated explicitly. This mirrors the
+ * gate the ui.js primitives apply to their own hover feedback. */
+@media (hover: hover) and (pointer: fine) {
+  .group:hover [data-cta-arrow] {
+    transform: translateY(2px);
+  }
+}
+
+/* Portrait hover lives inside the GSAP reveal wrapper. */
+.portrait-frame {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color 200ms var(--ease-out-strong);
+}
+.portrait-hover {
+  transition: transform 200ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .portrait-frame:hover {
+    border-color: var(--color-accent);
+  }
+  .portrait-frame:hover .portrait-hover {
+    transform: scale(1.02);
+  }
+}
+.project-screenshot,
+.image-viewer img {
+  filter: none;
+}
+.image-viewer {
+  width: calc(100% - 32px);
+  max-width: 1600px;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  margin: auto;
+  color: var(--color-fg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.image-viewer::backdrop {
+  background: rgb(0 0 0 / 80%);
+}
+.viewer-control {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  cursor: pointer;
+}
+.viewer-control:hover {
+  border-color: var(--color-accent);
+}
+.viewer-viewport {
+  height: 75dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.viewer-viewport img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.viewer-viewport.is-zoomed {
+  display: block;
+}
+.viewer-viewport.is-zoomed img {
+  max-width: none;
+  max-height: none;
+}
