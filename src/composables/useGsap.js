@@ -1,21 +1,16 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Flip } from 'gsap/Flip'
-import { SplitText } from 'gsap/SplitText'
 
 /**
  * Register plugins exactly once for the lifetime of the app.
  * GSAP's registerPlugin is idempotent, and a module body only evaluates once,
  * so this is the SINGLE registration point for the project. Do not register
  * plugins anywhere else.
- *
- * NOTE: Flip and SplitText are both bundled in the free gsap package as of
- * the installed version (3.15). No Club membership is required.
  */
 let registered = false
 if (!registered) {
-  gsap.registerPlugin(ScrollTrigger, Flip, SplitText)
+  gsap.registerPlugin(ScrollTrigger)
   registered = true
 }
 
@@ -51,13 +46,13 @@ export const STAGGER = {
 /**
  * Primary GSAP accessor for components.
  *
- * @returns {{ gsap: typeof gsap, ScrollTrigger: typeof ScrollTrigger, Flip: typeof Flip, SplitText: typeof SplitText }}
+ * @returns {{ gsap: typeof gsap, ScrollTrigger: typeof ScrollTrigger }}
  *
  * @example
  * const { gsap } = useGsap()
  */
 export function useGsap() {
-  return { gsap, ScrollTrigger, Flip, SplitText }
+  return { gsap, ScrollTrigger }
 }
 
 /**
@@ -101,36 +96,52 @@ export function useReducedMotion() {
  * Every animation created inside `setupFn` is scoped to `scope` and reverted
  * automatically on unmount, so no selector leaks across components.
  *
- * IMPORTANT: this composable owns reduced-motion gating for the animations it
- * creates. Use `setupFn` to build two animations via `gsap.matchMedia()`, or
- * gate manually. Section components must NOT register their own matchMedia.
+ * Pass respectReducedMotion to rerun setup with the current reducedMotion flag.
+ * The composable owns media queries; sections must not create matchMedia instances.
  *
- * @param {(ctx: { gsap: typeof gsap, ScrollTrigger: typeof ScrollTrigger, el: HTMLElement }) => void} setupFn
- * @param {{ scope?: import('vue').Ref<HTMLElement | null> }} [options]
+ * @param {(ctx: { gsap: typeof gsap, ScrollTrigger: typeof ScrollTrigger, el: HTMLElement, reducedMotion?: boolean }) => void} setupFn
+ * @param {{ scope?: import('vue').Ref<HTMLElement | null>, respectReducedMotion?: boolean }} [options]
  * @returns {{ refresh: () => void }}
  *
  * @example
  * const root = ref(null)
- * useContextGsap(({ gsap, el }) => {
- *   const mm = gsap.matchMedia()
- *   mm.add('(prefers-reduced-motion: no-preference)', () => {
- *     gsap.from(el.querySelectorAll('[data-reveal]'), {
- *       opacity: 0, y: 16, duration: DUR.reveal, ease: EASE.expo, stagger: STAGGER.list,
- *     })
+ * useContextGsap(({ gsap, el, reducedMotion }) => {
+ *   if (reducedMotion) return
+ *   gsap.from(el.querySelectorAll('[data-reveal]'), {
+ *     opacity: 0, y: 16, duration: DUR.reveal, ease: EASE.expo, stagger: STAGGER.list,
  *   })
- * }, { scope: root })
+ * }, { scope: root, respectReducedMotion: true })
  */
 export function useContextGsap(setupFn, options = {}) {
   let ctx
+  let mm
 
   onMounted(() => {
     const el = options.scope?.value ?? document.body
     ctx = gsap.context(() => {
-      setupFn({ gsap, ScrollTrigger, el })
+      if (options.respectReducedMotion) {
+        mm = gsap.matchMedia()
+        mm.add(
+          {
+            reducedMotion: '(prefers-reduced-motion: reduce)',
+            motion: '(prefers-reduced-motion: no-preference)',
+          },
+          (media) =>
+            setupFn({
+              gsap,
+              ScrollTrigger,
+              el,
+              reducedMotion: media.conditions.reducedMotion,
+            }),
+        )
+      } else {
+        setupFn({ gsap, ScrollTrigger, el })
+      }
     }, el)
   })
 
   onBeforeUnmount(() => {
+    mm?.revert()
     ctx?.revert()
   })
 
@@ -222,6 +233,72 @@ export function useReveal(config) {
       mm?.revert()
     },
   }
+}
+
+/** Rotating role text; pauses offscreen/in background and stays static under reduced motion. */
+export function useTypewriter({ root, words }) {
+  let mm
+
+  onMounted(() => {
+    const container = root()
+    const node = container?.querySelector('[data-typewriter]')
+    const labels = words().filter(Boolean)
+    if (!node || labels.length < 2) return
+
+    mm = gsap.matchMedia()
+    mm.add(
+      {
+        reducedMotion: '(prefers-reduced-motion: reduce)',
+        motion: '(prefers-reduced-motion: no-preference)',
+      },
+      (media) => {
+        node.textContent = labels[0]
+        if (media.conditions.reducedMotion) return
+
+        const state = { count: labels[0].length }
+        const timeline = gsap.timeline({ paused: true, repeat: -1 })
+        labels.forEach((label, index) => {
+          const next = labels[(index + 1) % labels.length]
+          timeline
+            .to({}, { duration: 2.4 })
+            .to(state, {
+              count: 0,
+              duration: label.length * 0.025,
+              ease: 'none',
+              onUpdate: () => {
+                node.textContent = label.slice(0, Math.round(state.count))
+              },
+            })
+            .to(state, {
+              count: next.length,
+              duration: next.length * 0.055,
+              ease: 'none',
+              onUpdate: () => {
+                node.textContent = next.slice(0, Math.round(state.count))
+              },
+            })
+        })
+
+        let inView = false
+        const sync = () => timeline.paused(!inView || document.hidden)
+        const observer = new IntersectionObserver(([entry]) => {
+          inView = entry.isIntersecting
+          sync()
+        })
+        observer.observe(container)
+        document.addEventListener('visibilitychange', sync)
+
+        return () => {
+          observer.disconnect()
+          document.removeEventListener('visibilitychange', sync)
+          timeline.kill()
+          node.textContent = labels[0]
+        }
+      },
+    )
+  })
+
+  onBeforeUnmount(() => mm?.revert())
 }
 
 export default useGsap

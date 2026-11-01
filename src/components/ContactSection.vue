@@ -1,12 +1,11 @@
 <script setup>
 import AppIcon from './AppIcon.vue'
 /**
- * ContactSection - centered colophon (PLAN 3.7)
+ * ContactSection - centered colophon (see PLAN.md)
  *
  * The page's ONE centered moment: max-w-2xl mx-auto text-center.
- * ONE availability pill (rounded-full, accent-tinted, single accent dot that
- * pulses opacity only, 2.4s). Primary CTA is a mailto; secondary is a ghost
- * "Download CV". No contact form.
+ * Direct invitation and mailto CTA; optional secondary "Download CV".
+ * No availability badge or contact form.
  *
  * Links carry full Iconify names backed by the committed offline registry.
  */
@@ -21,9 +20,8 @@ const props = defineProps({
   email: { type: String, default: '' },
   cvHref: { type: String, default: '' },
   social: { type: Object, default: () => ({}) },
-  availability: { type: String, default: '' },
   links: { type: Array, default: () => [] },
-  ctaLabel: { type: String, default: 'Start a conversation' },
+  ctaLabel: { type: String, default: '' },
   cvLabel: { type: String, default: 'Download CV' },
 })
 
@@ -88,20 +86,6 @@ function displayLabel(link) {
     class="mx-auto w-full max-w-2xl px-6 py-24 text-center lg:py-32"
     aria-labelledby="contact-heading"
   >
-    <!-- ONE availability pill on the page. -->
-    <p
-      v-if="props.availability"
-      class="mb-8 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 font-mono text-xs text-accent"
-      data-reveal
-    >
-      <span
-        class="size-1.5 shrink-0 rounded-full bg-accent motion-safe:animate-pulse"
-        aria-hidden="true"
-        style="animation-duration: 2.4s; animation-timing-function: ease-in-out"
-      />
-      {{ props.availability }}
-    </p>
-
     <h2
       id="contact-heading"
       class="mx-auto max-w-[22ch] font-display text-3xl font-medium leading-tight tracking-tight text-fg lg:text-4xl"

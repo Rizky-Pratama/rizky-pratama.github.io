@@ -9,14 +9,16 @@
  *   2. no em-dash or en-dash anywhere in the serialized site object
  */
 import { describe, it, expect } from 'vitest'
+import { existsSync } from 'node:fs'
 import { icons } from './icons.js'
 
 import { site, UNRESOLVED } from './site.js'
 
 
 describe('site identity + cta', () => {
-  it('name is a string (may be empty: identity is intentionally neutral)', () => {
+  it('name is a nonempty string', () => {
     expect(typeof site.name).toBe('string')
+    expect(site.name.trim()).not.toBe('')
   })
 
   it('cta.label is a non-empty string and cta.href is set', () => {
@@ -95,9 +97,8 @@ describe('projects', () => {
       // outcome is the one-line result ProjectsSection renders in full fg
       expect(typeof p.outcome).toBe('string')
       expect(p.outcome.trim().length).toBeGreaterThan(0)
-      // imageSeed selects a committed local asset in ProjectsSection
-      expect(typeof p.imageSeed).toBe('string')
-      expect(p.imageSeed.trim().length).toBeGreaterThan(0)
+      expect(p.image).toMatch(/^\/images\//)
+      expect(existsSync(new URL('../../public' + p.image, import.meta.url))).toBe(true)
     }
 
     // ids are unique (used as :key)

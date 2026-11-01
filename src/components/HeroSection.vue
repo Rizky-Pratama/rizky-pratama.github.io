@@ -1,11 +1,13 @@
 <script setup>
 import AppIcon from './AppIcon.vue'
 import { computed, ref } from 'vue'
-import { useContextGsap, EASE, DUR } from '../composables/useGsap'
+import { useContextGsap, useTypewriter, EASE, DUR } from '../composables/useGsap'
 
 const props = defineProps({
   icon: { type: String, default: '' },
   eyebrow: { type: String, default: '$ whoami' },
+  eyebrowName: { type: String, default: '' },
+  roles: { type: Array, default: () => [] },
   heading: { type: String, default: '' },
   subtext: { type: String, default: '' },
   portrait: {
@@ -20,6 +22,8 @@ const props = defineProps({
 
 const root = ref(null)
 
+useTypewriter({ root: () => root.value, words: () => props.roles })
+
 // Portrait is a committed local asset (public/images), resolved by Vite as-is.
 // `portrait.src` is the 1x file; `portrait.srcset` adds an optional 2x variant.
 const portraitSrc = computed(() => props.portrait.src)
@@ -29,10 +33,8 @@ const portraitSrcset = computed(() => props.portrait.srcset || undefined)
 // SINGLE clip-path Reveal; everything else is a staggered Slide in. Reduced
 // motion collapses to the final state via the matchMedia branch below.
 useContextGsap(
-  ({ gsap, el }) => {
-    const mm = gsap.matchMedia()
-
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
+  ({ gsap, el, reducedMotion }) => {
+    if (!reducedMotion) {
       const tl = gsap.timeline({ defaults: { ease: EASE.expo } })
 
       // Reveal: clip-path curtain on the headline block, opened top to bottom.
@@ -66,13 +68,11 @@ useContextGsap(
           { scaleY: 0, transformOrigin: 'top center', duration: 0.6, ease: EASE.out },
           0.3,
         )
-    })
-
-    mm.add('(prefers-reduced-motion: reduce)', () => {
+    } else {
       gsap.set(el.querySelector('[data-hero-heading]'), { clipPath: 'inset(0 0 0% 0)' })
-    })
+    }
   },
-  { scope: root },
+  { scope: root, respectReducedMotion: true },
 )
 </script>
 
@@ -85,11 +85,33 @@ useContextGsap(
     <!-- Text: cols 1-7 -->
     <div class="lg:col-span-7">
       <p data-hero-eyebrow class="mb-6 font-mono text-sm text-accent">
-        {{ eyebrow
-        }}<span
-          aria-hidden="true"
-          class="ml-1 inline-block h-[1.05em] w-[0.5ch] translate-y-[0.15em] bg-accent align-baseline"
-        ></span>
+        <template v-if="roles.length">
+          <span class="sr-only">{{ eyebrow }}</span>
+          <span aria-hidden="true" class="flex flex-wrap gap-x-2">
+            <span>{{ eyebrowName }} |</span>
+            <span class="relative inline-grid">
+              <span
+                v-for="role in roles"
+                :key="role"
+                class="invisible col-start-1 row-start-1 whitespace-nowrap pr-2"
+                >{{ role }}</span
+              >
+              <span class="absolute inset-0 whitespace-nowrap">
+                <span data-typewriter>{{ roles[0] }}</span
+                ><span
+                  class="ml-1 inline-block h-[1.05em] w-[0.5ch] translate-y-[0.15em] bg-accent align-baseline"
+                ></span>
+              </span>
+            </span>
+          </span>
+        </template>
+        <template v-else
+          >{{ eyebrow
+          }}<span
+            aria-hidden="true"
+            class="ml-1 inline-block h-[1.05em] w-[0.5ch] translate-y-[0.15em] bg-accent align-baseline"
+          ></span
+        ></template>
       </p>
 
       <h1

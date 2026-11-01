@@ -69,6 +69,8 @@ onBeforeUnmount(() => {
     <HeroSection
       :icon="site.icons.arrowDown"
       :eyebrow="sections.hero.eyebrow"
+      :eyebrow-name="site.name"
+      :roles="sections.hero.roles"
       :heading="sections.hero.heading"
       :subtext="sections.hero.subheading"
       :portrait="sections.hero.portrait"
@@ -113,7 +115,6 @@ onBeforeUnmount(() => {
       :cv-href="sections.contact.secondary.href"
       :cv-label="sections.contact.secondary.label"
       :links="sections.contact.links"
-      :availability="site.availability"
       :cta-label="site.cta.label"
     />
   </main>

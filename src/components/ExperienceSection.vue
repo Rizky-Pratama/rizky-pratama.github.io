@@ -9,69 +9,48 @@ defineProps({
 
 const root = ref(null)
 
-// Spine: Line drawing via scaleY from 0 with transform-origin top, driven by
-// scroll (linear, because the spine length IS scroll position). Entries reveal
-// x:-16 with a 0.1 stagger; dates lead their bodies slightly.
+// The composable owns media queries and cleanup for the timeline sequence.
 useContextGsap(
-  ({ gsap, el, ScrollTrigger }) => {
-    const mm = gsap.matchMedia()
+  ({ gsap, el, reducedMotion }) => {
+    if (reducedMotion) return
 
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.fromTo(
-        el.querySelector('[data-spine]'),
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          transformOrigin: 'top center',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 75%',
-            end: 'bottom 65%',
-            scrub: 0.6,
-          },
-        },
-      )
+    gsap.from(el.querySelector('[data-spine]'), {
+      scaleY: 0,
+      transformOrigin: 'top center',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: el.querySelector('[data-timeline]'),
+        start: 'top 80%',
+        end: 'bottom 65%',
+        scrub: 0.6,
+      },
+    })
 
-      const rows = gsap.utils.toArray(el.querySelectorAll('[data-entry]'))
-      ScrollTrigger.batch(rows, {
-        start: 'top 85%',
-        once: true,
-        onEnter: (batch) =>
-          gsap.from(batch, {
+    el.querySelectorAll('[data-entry]').forEach((row) => {
+      gsap
+        .timeline({
+          scrollTrigger: { trigger: row, start: 'top 85%', once: true },
+        })
+        .from(row.querySelector('[data-entry-dot]'), {
+          opacity: 0.3,
+          scale: 0.65,
+          duration: 0.2,
+          ease: EASE.out,
+        })
+        .from(
+          row.querySelectorAll('[data-entry-date], [data-entry-body]'),
+          {
             opacity: 0,
-            x: -16,
+            x: -12,
             duration: 0.5,
             ease: EASE.expo,
-            stagger: STAGGER.loose,
-          }),
-      })
-
-      gsap.from(el.querySelectorAll('[data-entry-date]'), {
-        opacity: 0,
-        duration: 0.35,
-        ease: EASE.out,
-        stagger: STAGGER.loose,
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse',
-        },
-      })
-    })
-
-    mm.add('(prefers-reduced-motion: reduce)', () => {
-      gsap.set(el.querySelector('[data-spine]'), {
-        scaleY: 1,
-        transformOrigin: 'top center',
-      })
-      gsap.set(el.querySelectorAll('[data-entry], [data-entry-date]'), {
-        opacity: 1,
-        x: 0,
-      })
+            stagger: STAGGER.base,
+          },
+          0.08,
+        )
     })
   },
-  { scope: root },
+  { scope: root, respectReducedMotion: true },
 )
 </script>
 
@@ -83,16 +62,16 @@ useContextGsap(
       {{ heading }}
     </h2>
 
-    <div class="relative mt-14 lg:pl-[7rem]">
-      <!-- The single left hairline spine -->
+    <div data-timeline class="relative mt-14 lg:pl-[7rem]">
+      <!-- Static rail remains visible beneath its scroll-drawn accent. -->
+      <span
+        aria-hidden="true"
+        class="absolute bottom-0 left-1 top-0 w-px bg-border"
+      ></span>
       <span
         data-spine
         aria-hidden="true"
-        class="absolute bottom-0 left-0 top-0 hidden w-px bg-border lg:block"
-      ></span>
-      <span
-        aria-hidden="true"
-        class="absolute bottom-0 left-[3px] top-0 w-px bg-border lg:hidden"
+        class="absolute bottom-0 left-1 top-0 w-px bg-accent"
       ></span>
 
       <ol class="flex flex-col gap-12">
@@ -100,16 +79,21 @@ useContextGsap(
           v-for="entry in entries"
           :key="entry.period + entry.title"
           data-entry
-          class="grid grid-cols-1 gap-2 lg:grid-cols-12 lg:gap-8"
+          class="relative grid grid-cols-1 gap-2 pl-7 lg:grid-cols-12 lg:gap-8 lg:pl-0"
         >
+          <span
+            data-entry-dot
+            aria-hidden="true"
+            class="absolute left-0 top-1.5 size-2.5 rounded-xs border border-accent bg-accent lg:-left-28"
+          ></span>
           <p
             data-entry-date
-            class="font-mono text-sm text-fg-muted lg:col-span-3 lg:-ml-[7rem] lg:pl-0"
+            class="font-mono text-sm text-fg-muted lg:col-span-3 lg:-ml-[7rem] lg:pl-7"
           >
             {{ entry.period }}
           </p>
 
-          <div class="lg:col-span-9">
+          <div data-entry-body class="lg:col-span-9">
             <h3 class="font-display text-lg font-medium tracking-[-0.01em] text-fg">
               {{ entry.title }}
               <span v-if="entry.org" class="text-fg-muted">, {{ entry.org }}</span>
@@ -119,7 +103,10 @@ useContextGsap(
             >
               {{ entry.body }}
             </p>
-            <ul v-if="entry.engagements?.length" class="mt-6 flex flex-col gap-6">
+            <ul
+              v-if="entry.engagements?.length"
+              class="mt-6 flex list-disc flex-col gap-6 pl-5 marker:text-fg-muted"
+            >
               <li v-for="engagement in entry.engagements" :key="engagement.org">
                 <h4 class="font-display text-base font-medium text-fg">
                   {{ engagement.org }}

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createSeo } from '../../scripts/seo.mjs'
+import { site } from './site.js'
 
 const getTag = (seo, key) => seo.tags.find((t) => t.attrs?.name === key || t.attrs?.property === key)?.attrs.content
 
@@ -12,7 +13,7 @@ describe('build-time SEO', () => {
     expect(seo.robots).toContain('Disallow: /')
     const person = JSON.parse(seo.tags.find((t) => t.tag === 'script').children)
     expect(person['@type']).toBe('Person')
-    expect(person.name).toBe('Muhammad Rizky Pratama')
+    expect(person.name).toBe(site.name)
   })
 
   it('generates consistent canonical, social images, sitemap and crawling rules', () => {

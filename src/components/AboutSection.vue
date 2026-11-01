@@ -1,10 +1,10 @@
 <script setup>
 /**
- * AboutSection - editorial prose + portrait (PLAN 3.6)
+ * AboutSection - editorial prose + portrait (see PLAN.md)
  *
- * Layout: stacked headline (max-w-[20ch]), then at lg a 2-col grid:
- * left col-span-7 prose (max-w-[65ch]), right col-span-4 aside holding the
- * portrait, readouts (mono, tabular-nums) and a "Now" list.
+ * Layout: at lg a 2-col grid with the headline and portrait top-aligned:
+ * left col-span-7 headline, prose (max-w-[65ch]) and a "Now" list, right
+ * col-span-4 aside holding the portrait and readouts (mono, tabular-nums).
  *
  * Motion: headline/body scroll-reveal, "Now" list staggers, portrait fades in
  * (NO clip-path - the curtain belongs to the hero). The readouts get a number
@@ -21,7 +21,7 @@ const props = defineProps({
   readouts: { type: Array, default: () => [] },
   portrait: {
     type: Object,
-    default: () => ({ src: '/images/portrait-640.webp', srcset: '', alt: '' }),
+    default: () => ({ src: '/images/about-three-quarter.webp', srcset: '', alt: '' }),
   },
 })
 
@@ -108,24 +108,43 @@ const portraitSrcset = computed(() => props.portrait.srcset || undefined)
     class="mx-auto w-full max-w-6xl px-6 py-24 lg:py-32"
     aria-labelledby="about-heading"
   >
-    <h2
-      id="about-heading"
-      class="max-w-[20ch] font-display text-3xl font-medium leading-tight tracking-tight text-fg lg:text-4xl"
-      data-reveal
+    <div
+      class="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-16"
     >
-      {{ props.heading }}
-    </h2>
+      <h2
+        id="about-heading"
+        class="max-w-[20ch] font-display text-3xl font-medium leading-tight tracking-tight text-fg lg:col-span-7 lg:text-4xl"
+        data-reveal
+      >
+        {{ props.heading }}
+      </h2>
 
-    <div class="mt-12 grid grid-cols-1 gap-12 lg:mt-16 lg:grid-cols-12 lg:gap-8">
-      <!-- Left: prose -->
-      <div class="lg:col-span-7">
+      <!-- Left: prose + Now -->
+      <div class="flex flex-col gap-10 lg:col-span-7 lg:gap-12">
         <p class="max-w-[65ch] text-lg leading-relaxed text-fg-muted" data-reveal>
           {{ props.body }}
         </p>
+
+        <div class="flex flex-col gap-3" data-reveal>
+          <h3 class="font-mono text-xs uppercase tracking-[0.16em] text-fg-muted">
+            {{ props.nowHeading }}
+          </h3>
+          <ul class="flex flex-col gap-2">
+            <li
+              v-for="item in props.now"
+              :key="item"
+              class="border-l border-border pl-3 text-sm leading-relaxed text-fg-muted"
+            >
+              {{ item }}
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <!-- Right: portrait + readouts + Now -->
-      <aside class="flex flex-col gap-8 lg:col-span-4">
+      <!-- Right: portrait + readouts -->
+      <aside
+        class="flex flex-col gap-8 lg:col-span-4 lg:col-start-8 lg:row-span-2 lg:row-start-1"
+      >
         <div class="portrait-frame" data-reveal>
           <div class="portrait-hover">
             <img
@@ -165,21 +184,6 @@ const portraitSrcset = computed(() => props.portrait.srcset || undefined)
             </dd>
           </div>
         </dl>
-
-        <div class="flex flex-col gap-3" data-reveal>
-          <h3 class="font-mono text-xs uppercase tracking-[0.16em] text-fg-muted">
-            {{ props.nowHeading }}
-          </h3>
-          <ul class="flex flex-col gap-2">
-            <li
-              v-for="item in props.now"
-              :key="item"
-              class="border-l border-border pl-3 text-sm leading-relaxed text-fg-muted"
-            >
-              {{ item }}
-            </li>
-          </ul>
-        </div>
       </aside>
     </div>
   </section>

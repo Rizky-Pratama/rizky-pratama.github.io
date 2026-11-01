@@ -76,13 +76,11 @@ describe('STAGGER presets', () => {
 })
 
 describe('useGsap()', () => {
-  it('returns gsap plus the three registered plugins, all truthy', () => {
+  it('returns gsap and the registered ScrollTrigger plugin', () => {
     const api = useGsap()
 
     expect(api.gsap, 'gsap').toBeTruthy()
     expect(api.ScrollTrigger, 'ScrollTrigger').toBeTruthy()
-    expect(api.Flip, 'Flip').toBeTruthy()
-    expect(api.SplitText, 'SplitText').toBeTruthy()
 
     // gsap is the real library object, not an empty stub.
     expect(typeof api.gsap.to).toBe('function')
@@ -93,7 +91,7 @@ describe('useGsap()', () => {
   it('registers the plugins so they are usable off the gsap instance', () => {
     // registerPlugin happened at module load; re-calling is idempotent and
     // must not throw (this guards the "registered once" contract).
-    const { gsap, ScrollTrigger, Flip, SplitText } = useGsap()
-    expect(() => gsap.registerPlugin(ScrollTrigger, Flip, SplitText)).not.toThrow()
+    const { gsap, ScrollTrigger } = useGsap()
+    expect(() => gsap.registerPlugin(ScrollTrigger)).not.toThrow()
   })
 })

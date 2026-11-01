@@ -54,7 +54,6 @@ describe('SiteNav', () => {
 
   it('renders the personalized wordmark', () => {
     const w = mountOk(SiteNav, props)
-    expect(site.name).toBe('Muhammad Rizky Pratama')
     expect(w.find('a[href="#top"]').text()).toBe(site.name)
   })
 })
@@ -202,16 +201,15 @@ describe('ContactSection', () => {
     email: site.email,
     cvHref: s.contact.secondary.href,
     links: s.contact.links,
-    availability: site.availability,
     ctaLabel: site.cta.label,
     cvLabel: s.contact.secondary.label,
     icons: site.icons,
   }
 
-  it('mounts and renders heading, availability pill and CTA buttons', () => {
+  it('mounts and renders the direct contact invitation and email CTA', () => {
     const w = mountOk(ContactSection, props)
     expect(w.find('#contact-heading').text()).toBe(s.contact.heading)
-    expect(w.html()).toContain(site.availability)
+    expect(w.find('.rounded-full').exists()).toBe(false)
     expect(w.html()).toContain(site.cta.label)
 
     const buttons = w.findAll('[data-ui-btn]')

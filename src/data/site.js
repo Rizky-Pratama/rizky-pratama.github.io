@@ -2,12 +2,11 @@
 export const UNRESOLVED = '--'
 
 export const site = {
-  name: 'Muhammad Rizky Pratama',
+  name: '$ Muhammad Rizky Pratama',
   role: 'Full Stack Developer',
   tagline: 'Web applications, from interface to database.',
   location: 'Cileungsi, Bogor, Indonesia',
   email: 'muhammadrizkyprtm2308@gmail.com',
-  availability: 'Available for full-time roles',
   social: {
     github: 'https://github.com/Rizky-Pratama',
     linkedin: 'https://www.linkedin.com/in/rizkyprtm/',
@@ -17,17 +16,17 @@ export const site = {
     dribbble: '',
   },
   cta: {
-    label: 'Start a conversation',
+    label: 'Email me',
     href: 'mailto:muhammadrizkyprtm2308@gmail.com',
   },
   nav: [
     {
-      label: 'Work',
-      href: '#work',
-    },
-    {
       label: 'Skills',
       href: '#skills',
+    },
+    {
+      label: 'Work',
+      href: '#work',
     },
     {
       label: 'Experience',
@@ -44,7 +43,13 @@ export const site = {
   ],
   sections: {
     hero: {
-      eyebrow: 'Muhammad Rizky Pratama / Full Stack Developer',
+      eyebrow: 'Muhammad Rizky Pratama',
+      roles: [
+        'Full Stack Developer',
+        'Laravel & Vue Developer',
+        'Web Developer',
+        'Software Engineer',
+      ],
       heading: 'Web applications, from interface to database.',
       subheading:
         'I build Laravel and Vue applications, with experience maintaining production software, developing REST APIs, and testing web features.',
@@ -201,7 +206,6 @@ export const site = {
           'Maintaining and improving an existing learning management system for the Faculty of Nursing at UNISSULA.',
         outcome:
           'Fixed production controller and file-persistence bugs, strengthened route authorization, refactored business logic, and added unit and feature tests.',
-        imageSeed: 'ledgerline-pipeline',
         image: '/images/lms.webp',
         imageWidth: 1470,
         imageHeight: 867,
@@ -217,7 +221,6 @@ export const site = {
           'A Laravel REST API and Vue interface for neighborhood dues, household records, payments, and reports.',
         outcome:
           'Used by two operators to manage records for 74 households, giving the neighborhood head direct access to centralized dues and payment information.',
-        imageSeed: 'atlas-auth-flow',
         image: '/images/iuran.webp',
         imageWidth: 1147,
         imageHeight: 696,
@@ -233,7 +236,6 @@ export const site = {
           'Independently developed a rental administration system and customer landing page for a car-rental business.',
         outcome:
           'Deployed the React landing page and resolved deployment workflow issues. The administration system uses test data and has not been adopted for daily operations.',
-        imageSeed: 'fjord-dashboard',
         links: [
           {
             label: 'Laravel source',
@@ -259,7 +261,6 @@ export const site = {
           'A diabetes-risk prediction web application connected to a logistic-regression inference service.',
         outcome:
           'Integrated Laravel with a Python/FastAPI REST service for prediction inputs, results, and history as an academic early-detection support project.',
-        imageSeed: 'undertow-field',
         links: [
           {
             label: 'Web application source',
@@ -331,8 +332,8 @@ export const site = {
           label: 'Households managed in Iuran',
         },
         {
-          value: '2',
-          label: 'Iuran application operators',
+          value: '10+',
+          label: 'Clients served',
         },
       ],
     },
@@ -350,8 +351,8 @@ export const site = {
       },
     },
     contact: {
-      heading: 'Let’s discuss your next developer opening.',
-      body: 'I am available for full-time developer roles and open to freelance projects. Get in touch to discuss your team or application.',
+      heading: 'Let’s work together.',
+      body: "I'm looking for a full-time developer role and also take on freelance projects. Email me if you'd like to talk.",
       secondary: {
         label: 'Download CV',
         href: '',
