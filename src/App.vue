@@ -58,6 +58,7 @@ onBeforeUnmount(() => {
   </a>
 
   <SiteNav
+    :icon="site.icons.menu"
     :name="site.name"
     :nav="site.nav"
     :cta-label="site.cta.label"
@@ -66,6 +67,7 @@ onBeforeUnmount(() => {
 
   <main id="main">
     <HeroSection
+      :icon="site.icons.arrowDown"
       :eyebrow="sections.hero.eyebrow"
       :heading="sections.hero.heading"
       :subtext="sections.hero.subheading"
@@ -76,29 +78,40 @@ onBeforeUnmount(() => {
       :secondary-href="sections.hero.secondary.href"
     />
 
-    <SkillsSection :groups="sections.skills.groups" />
+    <SkillsSection
+      :groups="sections.skills.groups"
+      :heading="sections.skills.heading"
+      :eyebrow="sections.skills.eyebrow"
+    />
 
     <ProjectsSection
       :heading="sections.work.heading"
       :intro="sections.work.intro"
       :projects="sections.projects"
+      :viewer-labels="sections.work.viewer"
     />
 
-    <ExperienceSection heading="Experience" :entries="sections.experience" />
+    <ExperienceSection
+      :heading="sections.experienceHeading"
+      :entries="sections.experience"
+    />
 
     <AboutSection
       :heading="sections.about.heading"
       :body="sections.about.body"
       :now="sections.about.now"
+      :now-heading="sections.about.nowHeading"
       :readouts="sections.about.readouts"
       :portrait="sections.about.portrait"
     />
 
     <ContactSection
+      :icons="site.icons"
       :heading="sections.contact.heading"
       :body="sections.contact.body"
       :email="site.email"
       :cv-href="sections.contact.secondary.href"
+      :cv-label="sections.contact.secondary.label"
       :links="sections.contact.links"
       :availability="site.availability"
       :cta-label="site.cta.label"
@@ -106,6 +119,7 @@ onBeforeUnmount(() => {
   </main>
 
   <SiteFooter
+    :icon="site.icons.arrowUp"
     :name="site.name"
     :role="site.role"
     :location="site.location"

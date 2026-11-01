@@ -16,6 +16,7 @@ import { useReveal, useContextGsap, useReducedMotion } from '../composables/useG
 const props = defineProps({
   heading: { type: String, default: '' },
   body: { type: String, default: '' },
+  nowHeading: { type: String, default: '' },
   now: { type: Array, default: () => [] },
   readouts: { type: Array, default: () => [] },
   portrait: {
@@ -38,7 +39,7 @@ useReveal({
 
 /**
  * Number ticker: only for readouts whose value is a plain integer with an
- * optional trailing "+" (e.g. "40+", "3"). Tokens like "{YEARS}" and the
+ * optional trailing "+" (e.g. "40+", "3"). Tokens like "unresolved values" and the
  * unresolved "--" are left alone. Runs once when the aside enters view.
  *
  * Reduced motion is read from the composable's reactive flag, so this section
@@ -85,7 +86,7 @@ useContextGsap(
 
 /**
  * Split a readout value into a ticker target + suffix. Returns null when the
- * value is not a plain integer (e.g. "{YEARS}" or "--"), so those render as
+ * value is not a plain integer (e.g. "unresolved values" or "--"), so those render as
  * static text.
  */
 function tickerFor(value) {
@@ -125,18 +126,21 @@ const portraitSrcset = computed(() => props.portrait.srcset || undefined)
 
       <!-- Right: portrait + readouts + Now -->
       <aside class="flex flex-col gap-8 lg:col-span-4">
-        <img
-          :src="portraitSrc"
-          :srcset="portraitSrcset"
-          sizes="(min-width: 1024px) 33vw, 100vw"
-          :alt="props.portrait.alt || 'Portrait'"
-          width="640"
-          height="800"
-          loading="lazy"
-          decoding="async"
-          class="aspect-[4/5] w-full rounded-md border border-border object-cover"
-          data-reveal
-        />
+        <div class="portrait-frame" data-reveal>
+          <div class="portrait-hover">
+            <img
+              :src="portraitSrc"
+              :srcset="portraitSrcset"
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              :alt="props.portrait.alt || 'Portrait'"
+              width="640"
+              height="800"
+              loading="lazy"
+              decoding="async"
+              class="aspect-[4/5] w-full object-cover"
+            />
+          </div>
+        </div>
 
         <dl class="grid grid-cols-2 gap-6">
           <div
@@ -163,7 +167,9 @@ const portraitSrcset = computed(() => props.portrait.srcset || undefined)
         </dl>
 
         <div class="flex flex-col gap-3" data-reveal>
-          <h3 class="font-mono text-xs uppercase tracking-[0.16em] text-fg-muted">Now</h3>
+          <h3 class="font-mono text-xs uppercase tracking-[0.16em] text-fg-muted">
+            {{ props.nowHeading }}
+          </h3>
           <ul class="flex flex-col gap-2">
             <li
               v-for="item in props.now"

@@ -4,7 +4,7 @@
  *
  * Layout: lg:grid-cols-12, four tiles at col-span 5 / 7 / 7 / 5.
  * Visual variation on 2 of 4 cells: tile 2 (index 1) gets the surface-2 tint
- * plus an inline code snippet, tile 4 (index 3) gets a subtle border grid
+ *  tile 4 (index 3) gets a subtle border grid
  * pattern. Tiles 1 and 3 stay flat `surface`.
  *
  * Motion: tiles reveal as a staggered scale-in (0.97 + y + fade) through
@@ -16,6 +16,8 @@ import { useReveal } from '../composables/useGsap.js'
 import { TechChip } from './ui.js'
 
 const props = defineProps({
+  heading: { type: String, default: '' },
+  eyebrow: { type: String, default: '' },
   groups: { type: Array, default: () => [] },
 })
 
@@ -35,7 +37,10 @@ useReveal({
 // Layout slots: 4 tiles, spans 5 / 7 / 7 / 5. Extra groups past 4 stay at 6.
 const spans = ['lg:col-span-5', 'lg:col-span-7', 'lg:col-span-7', 'lg:col-span-5']
 
-const spanFor = (i) => spans[i] ?? 'lg:col-span-6'
+const spanFor = (i) =>
+  props.groups.length % 2 === 1 && i === props.groups.length - 1
+    ? 'lg:col-span-12'
+    : (spans[i] ?? 'lg:col-span-6')
 
 // Tiles 2 and 4 carry real variation; 1 and 3 stay flat surface.
 const isTinted = (i) => i === 1
@@ -63,14 +68,14 @@ const tileClass = (i) =>
         class="mb-3 font-mono text-xs uppercase tracking-[0.18em] text-fg-muted"
         data-eyebrow
       >
-        $ stack
+        {{ props.eyebrow }}
       </p>
       <h2
         id="skills-heading"
         class="max-w-[24ch] font-display text-3xl font-medium tracking-tight text-fg lg:text-4xl"
         data-reveal
       >
-        What I work with
+        {{ props.heading }}
       </h2>
     </header>
 
@@ -104,18 +109,9 @@ const tileClass = (i) =>
           </p>
         </div>
 
-        <!-- Tile 2: inline code snippet (variation). -->
-        <pre
-          v-if="isTinted(i)"
-          class="relative overflow-x-auto rounded-sm border border-border bg-bg p-3 font-mono text-[0.7rem] leading-relaxed text-fg-muted"
-          aria-hidden="true"
-        ><code>const stack = {{
-            ' [' + group.stack.length + ']'
-          }}; // typed end to end</code></pre>
-
         <ul class="relative flex flex-wrap gap-2" aria-label="Technologies">
-          <li v-for="tech in group.stack" :key="tech.slug">
-            <TechChip :name="tech.name" :slug="tech.slug" />
+          <li v-for="tech in group.stack" :key="tech.name">
+            <TechChip :name="tech.name" :icon="tech.icon" />
           </li>
         </ul>
       </article>

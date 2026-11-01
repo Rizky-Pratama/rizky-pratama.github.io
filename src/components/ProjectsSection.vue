@@ -1,25 +1,18 @@
 <script setup>
-/**
- * ProjectsSection - vertical case-study list (PLAN 3.4)
- *
- * A single-column list of 4 entries separated by `divide-y` hairlines, not
- * cards. Each row is a 2-col grid at lg: left col-span-7 (text), right
- * col-span-4 (image), consistently left-text/right-image. Never alternating.
- *
- * Motion: headline + rows scroll-reveal via `useReveal` (composable owns
- * matchMedia). Images get a small yPercent -4..4 scroll-scrub parallax through
- * `useContextGsap`, gated by the composable's `useReducedMotion` flag. No pins.
- */
+/** Full project screenshots with scroll reveals and a shared accessible image viewer. */
 import { ref } from 'vue'
-import { useReveal, useContextGsap, useReducedMotion } from '../composables/useGsap.js'
+import { useReveal } from '../composables/useGsap.js'
+import ImageViewer from './ImageViewer.vue'
 
 const props = defineProps({
+  viewerLabels: { type: Object, required: true },
   projects: { type: Array, default: () => [] },
   heading: { type: String, default: 'Selected work' },
   intro: { type: String, default: '' },
 })
 
 const root = ref(null)
+const viewer = ref(null)
 
 // The composable owns matchMedia for reveal motion; sections pass config only.
 useReveal({
@@ -31,55 +24,6 @@ useReveal({
   ease: 'expo.out',
   start: 'top 82%',
 })
-
-// `useReducedMotion` is the composable's reactive flag and the single
-// matchMedia owner. We branch in plain JS from it rather than registering a
-// second matchMedia in this section.
-const { prefersReducedMotion } = useReducedMotion()
-
-// Parallax on the images ONLY, scrub 1, no pin. Skipped entirely when the
-// user prefers reduced motion.
-useContextGsap(
-  ({ gsap, el }) => {
-    if (prefersReducedMotion.value) return
-
-    const images = gsap.utils.toArray(el.querySelectorAll('[data-parallax]'))
-    if (!images.length) return
-
-    images.forEach((img) => {
-      gsap.fromTo(
-        img,
-        { yPercent: -4 },
-        {
-          yPercent: 4,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: img,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          },
-        },
-      )
-    })
-  },
-  { scope: root },
-)
-
-// Project artwork is committed to `public/images/` by scripts/gen-images.mjs.
-// Each project's `imageSeed` selects a local asset; the caller may also set
-// `image` to an explicit path (e.g. a real photo) to override the seed.
-const IMAGE_BY_SEED = {
-  'ledgerline-pipeline': '/images/project-ledgerline.webp',
-  'atlas-auth-flow': '/images/project-atlas-auth.webp',
-  'fjord-dashboard': '/images/project-fjord-dashboard.webp',
-  'undertow-field': '/images/project-undertow.webp',
-}
-
-const FALLBACK_IMAGE = '/images/project-ledgerline.webp'
-
-const imageSrc = (project) =>
-  project.image || IMAGE_BY_SEED[project.imageSeed] || FALLBACK_IMAGE
 </script>
 
 <template>
@@ -144,24 +88,40 @@ const imageSrc = (project) =>
               {{ tech }}
             </li>
           </ul>
+          <ul v-if="project.links?.length" class="flex flex-wrap gap-4">
+            <li v-for="link in project.links" :key="link.href">
+              <a
+                :href="link.href"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-11 items-center text-sm text-fg underline underline-offset-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent"
+                >{{ link.label }}</a
+              >
+            </li>
+          </ul>
         </div>
 
         <!-- Right: image, offset down at lg for rhythm (not alternation). -->
         <div class="lg:col-span-4 lg:mt-8">
-          <div class="overflow-hidden rounded-md border border-border bg-surface">
+          <button
+            type="button"
+            :aria-label="project.imageLabel"
+            class="block w-full cursor-zoom-in overflow-hidden rounded-md border border-border bg-surface hover:border-accent"
+            @click="viewer.open(project, $event.currentTarget)"
+          >
             <img
-              :src="imageSrc(project)"
-              :alt="`${project.title} case study`"
-              width="800"
-              height="600"
+              :src="project.image"
+              :alt="project.imageAlt"
+              :width="project.imageWidth"
+              :height="project.imageHeight"
               loading="lazy"
               decoding="async"
-              class="aspect-[4/3] w-full object-cover"
-              data-parallax
+              class="project-screenshot h-auto w-full"
             />
-          </div>
+          </button>
         </div>
       </li>
     </ol>
+    <ImageViewer ref="viewer" :labels="props.viewerLabels" />
   </section>
 </template>

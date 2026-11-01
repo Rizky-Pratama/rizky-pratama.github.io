@@ -39,7 +39,7 @@ function mountOk(component, props) {
 }
 
 describe('SiteNav', () => {
-  const props = { name: site.name, nav: site.nav, ctaLabel: site.cta.label, ctaHref: site.cta.href }
+  const props = { icon: site.icons.menu, name: site.name, nav: site.nav, ctaLabel: site.cta.label, ctaHref: site.cta.href }
 
   it('mounts and renders the primary nav with every anchor', () => {
     const w = mountOk(SiteNav, props)
@@ -52,15 +52,16 @@ describe('SiteNav', () => {
     }
   })
 
-  it('falls back to the "Portfolio" wordmark when name is empty', () => {
+  it('renders the personalized wordmark', () => {
     const w = mountOk(SiteNav, props)
-    expect(site.name).toBe('')
-    expect(w.find('a[href="#top"]').text()).toBe('Portfolio')
+    expect(site.name).toBe('Muhammad Rizky Pratama')
+    expect(w.find('a[href="#top"]').text()).toBe(site.name)
   })
 })
 
 describe('HeroSection', () => {
   const props = {
+    icon: site.icons.arrowDown,
     eyebrow: s.hero.eyebrow,
     heading: s.hero.heading,
     subtext: s.hero.subheading,
@@ -84,7 +85,7 @@ describe('HeroSection', () => {
 
   it('renders the committed portrait asset', () => {
     const w = mountOk(HeroSection, props)
-    const img = w.find('[data-hero-portrait]')
+    const img = w.find('[data-hero-portrait] img')
     expect(img.exists()).toBe(true)
     expect(img.attributes('alt')).toBe(s.hero.portrait.alt)
     expect(img.attributes('src')).toBe(s.hero.portrait.src)
@@ -94,10 +95,10 @@ describe('HeroSection', () => {
 describe('SkillsSection', () => {
   const props = { groups: s.skills.groups }
 
-  it('mounts and renders all 4 group titles', () => {
+  it('mounts and renders all group titles', () => {
     const w = mountOk(SkillsSection, props)
     const articles = w.findAll('article')
-    expect(articles).toHaveLength(4)
+    expect(articles).toHaveLength(s.skills.groups.length)
     // Rendered text is entity-decoded ("Data & Infra"), unlike w.html().
     const text = w.text()
     for (const group of s.skills.groups) {
@@ -105,23 +106,30 @@ describe('SkillsSection', () => {
     }
   })
 
-  it('renders one TechChip per stack item (20 total), each with a local icon', () => {
+  it('renders every skill, with local icons where available', () => {
     const w = mountOk(SkillsSection, props)
     const chips = w.findAll('[data-ui-chip]')
-    expect(chips).toHaveLength(20)
+    expect(chips).toHaveLength(s.skills.groups.flatMap((g) => g.stack).length)
 
-    // Every chip resolves its icon to the committed local path.
-    const imgs = w.findAll('[data-ui-chip] img')
-    expect(imgs).toHaveLength(20)
-    for (const img of imgs) {
-      const src = img.attributes('src')
-      expect(src).toMatch(/^\/icons\/[a-z0-9]+\.svg$/)
+    const svgs = w.findAll('[data-ui-chip] svg')
+    expect(svgs).toHaveLength(s.skills.groups.flatMap((g) => g.stack).length)
+    for (const svg of svgs) {
+      expect(svg.attributes('data-icon')).toBeTruthy()
+      expect(svg.attributes('aria-hidden')).toBe('true')
+      expect(svg.attributes('width')).toBe('14')
     }
   })
 })
 
 describe('ProjectsSection', () => {
-  const props = { projects: s.projects, heading: s.work.heading, intro: s.work.intro }
+  it('renders public source links only where supplied', () => {
+    const w = mountOk(ProjectsSection, { projects: s.projects, viewerLabels: s.work.viewer })
+    expect(w.findAll('a')).toHaveLength(4)
+    for (const project of s.projects) for (const link of project.links || []) {
+      expect(w.find('a[href="' + link.href + '"]').attributes('rel')).toBe('noopener noreferrer')
+    }
+  })
+  const props = { projects: s.projects, heading: s.work.heading, intro: s.work.intro, viewerLabels: s.work.viewer }
 
   it('mounts and renders 4 case-study rows with outcome copy', () => {
     const w = mountOk(ProjectsSection, props)
@@ -132,7 +140,7 @@ describe('ProjectsSection', () => {
       expect(w.html(), `title ${project.title}`).toContain(project.title)
       // Outcome text is rendered in full.
       expect(w.html(), `outcome ${project.id}`).toContain(project.outcome)
-      expect(w.find(`img[alt="${project.title} case study"]`).exists()).toBe(true)
+      expect(w.find('img[alt="' + project.imageAlt + '"]').exists()).toBe(true)
     }
   })
 
@@ -184,6 +192,10 @@ describe('AboutSection', () => {
 })
 
 describe('ContactSection', () => {
+  it('shows a CV download only when a URL is supplied', () => {
+    const w = mountOk(ContactSection, { cvHref: '/resume.pdf', cvLabel: 'Download CV' })
+    expect(w.find('a[href="/resume.pdf"]').text()).toContain('Download CV')
+  })
   const props = {
     heading: s.contact.heading,
     body: s.contact.body,
@@ -193,6 +205,7 @@ describe('ContactSection', () => {
     availability: site.availability,
     ctaLabel: site.cta.label,
     cvLabel: s.contact.secondary.label,
+    icons: site.icons,
   }
 
   it('mounts and renders heading, availability pill and CTA buttons', () => {
@@ -202,7 +215,7 @@ describe('ContactSection', () => {
     expect(w.html()).toContain(site.cta.label)
 
     const buttons = w.findAll('[data-ui-btn]')
-    expect(buttons.length).toBeGreaterThanOrEqual(2)
+    expect(buttons).toHaveLength(1)
     // Primary CTA is a mailto link to the configured email.
     expect(w.find(`a[href="mailto:${site.email}"]`).exists()).toBe(true)
   })
@@ -213,13 +226,14 @@ describe('ContactSection', () => {
       expect(w.find(`a[href="${link.href}"]`).exists(), `link ${link.href}`).toBe(true)
     }
     // One inline svg path per link.
-    const paths = w.findAll('ul a svg path')
+    const paths = w.findAll('ul a svg[data-icon]')
     expect(paths).toHaveLength(s.contact.links.length)
   })
 })
 
 describe('SiteFooter', () => {
   const props = {
+    icon: site.icons.arrowUp,
     name: site.name,
     role: site.role,
     location: site.location,

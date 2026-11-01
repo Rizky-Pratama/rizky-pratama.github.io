@@ -14,9 +14,10 @@
  * - transform/opacity only. Press uses `:active` scale 0.97, never a zero-scale.
  * - Hover feedback gated to fine pointers via a `@media (hover: hover)` rule
  *   injected once into the document head.
- * - No em-dashes, no fabricated wordmarks, real Simple Icons for TechChip.
+ * - No em-dashes, no fabricated wordmarks, local Iconify data for every icon.
  */
 import { defineComponent, h } from 'vue'
+import AppIcon from './AppIcon.vue'
 
 /* ---------------------------------------------------------------------------
  * Shared CSS. Injected once at module load; covers the fine-pointer hover
@@ -111,26 +112,7 @@ export const AppButton = defineComponent({
 
       const children = [h('span', null, props.label)]
 
-      if (props.icon === 'download') {
-        // Phosphor-style arrow-down. Functional, not decorative.
-        children.push(
-          h(
-            'svg',
-            {
-              class: 'size-4 shrink-0',
-              viewBox: '0 0 256 256',
-              fill: 'currentColor',
-              'aria-hidden': 'true',
-              focusable: 'false',
-            },
-            [
-              h('path', {
-                d: 'M224 152v56a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-56a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0Zm-101.66 5.66a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 133.66V32a8 8 0 0 0-16 0v101.66l-26.34-26.35a8 8 0 0 0-11.32 11.32Z',
-              }),
-            ],
-          ),
-        )
-      }
+      if (props.icon) children.push(h(AppIcon, { name: props.icon }))
 
       const attrs = {
         class: cls,
@@ -159,44 +141,30 @@ export const AppButton = defineComponent({
  * TechChip
  * ------------------------------------------------------------------------- */
 
-/**
- * Local, committed Simple Icons SVG (see scripts/gen-icons.mjs). Generated at
- * build time into public/icons/{slug}.svg with the chip's muted tint baked in,
- * so the chip never hotlinks a CDN at runtime. Filenames match the site data's
- * `slug` field exactly. An empty slug yields an empty src, so a broken chip
- * renders no stray box instead of requesting a nonexistent icon.
- */
-const TECH_ICON = (slug) => (slug ? `/icons/${slug}.svg` : '')
+/** Skill logos use the shared offline Iconify renderer. */
 
 /**
  * TechChip
  *
- * A local Simple Icons SVG plus a text label.
+ * An offline Iconify SVG plus a text label.
  * When `href` is set the whole chip is an anchor; otherwise a static span.
  *
- * Props: { name, slug, href }
+ * Props: { name, icon, href }
  */
 export const TechChip = defineComponent({
   name: 'TechChip',
   props: {
     name: { type: String, default: '' },
-    slug: { type: String, default: '' },
+    icon: { type: String, default: '' },
     href: { type: String, default: '' },
   },
   setup(props) {
     return () => {
       ensureStyles()
 
-      const logo = h('img', {
-        src: TECH_ICON(props.slug),
-        alt: '',
-        width: '14',
-        height: '14',
-        loading: 'lazy',
-        decoding: 'async',
-        'aria-hidden': 'true',
-        class: 'size-3.5 shrink-0 opacity-90',
-      })
+      const logo = props.icon
+        ? h(AppIcon, { name: props.icon, size: 14, class: 'opacity-90' })
+        : null
 
       const label = h(
         'span',

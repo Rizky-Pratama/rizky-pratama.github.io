@@ -5,18 +5,14 @@
  * component destructure it assuming these keys/shapes exist. These tests pin
  * the SHAPE (a contract), not the placeholder VALUES, plus two real hygiene
  * guards the project enforces:
- *   1. every skill `slug` has a committed icon file at public/icons/{slug}.svg
+ *   1. every configured Iconify name has committed offline data
  *   2. no em-dash or en-dash anywhere in the serialized site object
  */
 import { describe, it, expect } from 'vitest'
-import { readdirSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import { dirname, resolve } from 'node:path'
+import { icons } from './icons.js'
 
 import { site, UNRESOLVED } from './site.js'
 
-const HERE = dirname(fileURLToPath(import.meta.url))
-const ICONS_DIR = resolve(HERE, '../../public/icons')
 
 describe('site identity + cta', () => {
   it('name is a string (may be empty: identity is intentionally neutral)', () => {
@@ -111,39 +107,34 @@ describe('projects', () => {
 })
 
 describe('skills groups', () => {
-  it('has 4 groups of 5 stack items each with {name, slug}', () => {
+  it('has nonempty skill groups with Iconify names', () => {
     const groups = site.sections.skills.groups
     expect(Array.isArray(groups)).toBe(true)
-    expect(groups).toHaveLength(4)
+    expect(groups.length).toBeGreaterThan(0)
 
     for (const group of groups) {
       expect(typeof group.id).toBe('string')
       expect(typeof group.title).toBe('string')
       expect(typeof group.blurb).toBe('string')
       expect(Array.isArray(group.stack)).toBe(true)
-      expect(group.stack).toHaveLength(5)
+      expect(group.stack.length).toBeGreaterThan(0)
 
       for (const tech of group.stack) {
         expect(typeof tech.name).toBe('string')
         expect(tech.name.trim().length).toBeGreaterThan(0)
-        expect(typeof tech.slug).toBe('string')
-        expect(tech.slug.trim().length).toBeGreaterThan(0)
+        expect(typeof tech.icon).toBe('string')
+        // A skill without an available local logo renders as text.
       }
     }
   })
 
-  it('EVERY skill slug has a committed public/icons/{slug}.svg file', () => {
-    const committed = new Set(readdirSync(ICONS_DIR))
-
-    const slugs = site.sections.skills.groups.flatMap((g) => g.stack.map((t) => t.slug))
-    expect(slugs.length).toBe(20)
-
-    for (const slug of slugs) {
-      expect(
-        committed.has(`${slug}.svg`),
-        `public/icons/${slug}.svg must exist (TechChip requests /icons/${slug}.svg)`,
-      ).toBe(true)
+  it('resolves every configured UI, technology, and contact icon locally', () => {
+    const names = [...Object.values(site.icons), ...site.sections.skills.groups.flatMap((g) => g.stack.map((t) => t.icon)), ...site.sections.contact.links.map((link) => link.icon)]
+    for (const name of names) {
+      expect(icons[name], name).toBeDefined()
+      expect(icons[name].body.length).toBeGreaterThan(0)
     }
+    expect(new Set(names)).toEqual(new Set(Object.keys(icons)))
   })
 })
 

@@ -1,271 +1,418 @@
-/**
- * Site-wide content configuration.
- *
- * SHAPE is stable: consumers (App.vue + section components) rely on these
- * keys existing. VALUES are swappable placeholders.
- *
- * ---------------------------------------------------------------------------
- * TODO: replace with your details
- *   - `name`     : your name (left empty so nothing is asserted for you)
- *   - `location` : your city, shown in ONE place only (the footer contact line)
- *   - `email` / `social.*` / CV : your real handles (currently example.com)
- *   - `about.readouts` : your real numbers (currently neutral tokens)
- *   - `projects[*]` / `experience[*]` : your real work (invented case studies
- *     below are intentional demo content, safe to keep or replace)
- * The human identity is deliberately NEUTRAL. No name, gender, city, or
- * tenure is hard-coded anywhere in the UI.
- * ---------------------------------------------------------------------------
- */
-
-/** Unresolved-token convention: the UI renders "{X}" as a muted "--" and the
- * value stays obviously swappable. Kept as a string so the shape is uniform. */
+/** Personalized portfolio content. All editable copy and links live here. */
 export const UNRESOLVED = '--'
 
 export const site = {
-  // ---- Identity (neutral placeholder) ----
-  name: '', // TODO: replace with your details
-  role: 'Fullstack Developer',
-  tagline: '',
-  location: '', // TODO: footer contact line only (single locale mention)
-  email: 'hello@example.com',
-  availability: '{AVAILABILITY}', // TODO: e.g. "Available for freelance work"
-
+  name: 'Muhammad Rizky Pratama',
+  role: 'Full Stack Developer',
+  tagline: 'Web applications, from interface to database.',
+  location: 'Cileungsi, Bogor, Indonesia',
+  email: 'muhammadrizkyprtm2308@gmail.com',
+  availability: 'Available for full-time roles',
   social: {
-    github: 'https://github.com/your-handle',
-    linkedin: 'https://linkedin.com/in/your-handle',
+    github: 'https://github.com/Rizky-Pratama',
+    linkedin: 'https://www.linkedin.com/in/rizkyprtm/',
+    instagram: 'https://www.instagram.com/rizkyprtm___/',
+    threads: 'https://www.threads.com/@rizkyprtm___',
     x: '',
     dribbble: '',
   },
-
-  // Primary CTA, used identically in the nav, the hero and the contact
-  // section. One label, one intent.
   cta: {
     label: 'Start a conversation',
-    href: 'mailto:hello@example.com',
+    href: 'mailto:muhammadrizkyprtm2308@gmail.com',
   },
-
   nav: [
-    { label: 'Work', href: '#work' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Experience', href: '#experience' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
+    {
+      label: 'Work',
+      href: '#work',
+    },
+    {
+      label: 'Skills',
+      href: '#skills',
+    },
+    {
+      label: 'Experience',
+      href: '#experience',
+    },
+    {
+      label: 'About',
+      href: '#about',
+    },
+    {
+      label: 'Contact',
+      href: '#contact',
+    },
   ],
-
   sections: {
     hero: {
-      eyebrow: '$ whoami',
-      heading: 'From the first query to the final frame.',
-      // <= 20 words, no city, no invented tenure.
+      eyebrow: 'Muhammad Rizky Pratama / Full Stack Developer',
+      heading: 'Web applications, from interface to database.',
       subheading:
-        'Interfaces and the APIs behind them, built to hold up under production load and stay fast as the data grows.',
-      // Portrait is a committed local asset. To swap in a real photo, drop
-      // your file in `public/images/` and point `src` (and optional `srcset`)
-      // at it. `scripts/gen-images.mjs` regenerates the demo artwork.
+        'I build Laravel and Vue applications, with experience maintaining production software, developing REST APIs, and testing web features.',
       portrait: {
-        src: '/images/portrait-900.webp',
-        srcset: '/images/portrait-900.webp 1x, /images/portrait-180.webp 0.2x',
-        alt: 'Portrait',
+        src: '/images/my-foto.webp',
+        srcset: '',
+        alt: 'Muhammad Rizky Pratama',
       },
-      secondary: { label: 'See selected work', href: '#work' },
+      secondary: {
+        label: 'See selected work',
+        href: '#work',
+      },
     },
-
     skills: {
       heading: 'What I work with',
       groups: [
         {
           id: 'frontend',
           title: 'Frontend',
-          blurb: 'Interfaces that stay fast as the dataset grows.',
+          blurb:
+            'Responsive interfaces with Vue, Nuxt.js, React, Next.js, and Laravel Livewire.',
           stack: [
-            { name: 'Vue 3', slug: 'vuedotjs' },
-            { name: 'TypeScript', slug: 'typescript' },
-            { name: 'Tailwind', slug: 'tailwindcss' },
-            { name: 'Vite', slug: 'vite' },
-            { name: 'GSAP', slug: 'greensock' },
+            {
+              name: 'JavaScript',
+              icon: 'simple-icons:javascript',
+            },
+            {
+              name: 'Vue',
+              icon: 'simple-icons:vuedotjs',
+            },
+            {
+              name: 'React',
+              icon: 'simple-icons:react',
+            },
+            {
+              name: 'Tailwind CSS',
+              icon: 'simple-icons:tailwindcss',
+            },
+            {
+              name: 'Livewire',
+              icon: 'simple-icons:livewire',
+            },
+            {
+              name: 'Next.js',
+              icon: 'simple-icons:nextdotjs',
+            },
+            {
+              name: 'Nuxt.js',
+              icon: 'simple-icons:nuxt',
+            },
           ],
         },
         {
           id: 'backend',
           title: 'Backend',
-          blurb: 'APIs and services that keep their promises.',
+          blurb:
+            'Laravel and Express.js APIs, Eloquent data access, authentication, and role-based authorization.',
           stack: [
-            { name: 'Node.js', slug: 'nodedotjs' },
-            { name: 'PostgreSQL', slug: 'postgresql' },
-            { name: 'Redis', slug: 'redis' },
-            { name: 'Fastify', slug: 'fastify' },
-            { name: 'GraphQL', slug: 'graphql' },
+            {
+              name: 'PHP',
+              icon: 'simple-icons:php',
+            },
+            {
+              name: 'Laravel',
+              icon: 'simple-icons:laravel',
+            },
+            {
+              name: 'MySQL',
+              icon: 'simple-icons:mysql',
+            },
+            {
+              name: 'Express.js',
+              icon: 'simple-icons:express',
+            },
           ],
         },
         {
-          id: 'data-infra',
-          title: 'Data & Infra',
-          blurb: 'Pipelines, schemas, and the plumbing under both.',
+          id: 'data-ml',
+          title: 'Data & ML',
+          blurb:
+            'Python data preparation and machine-learning services connected to web applications.',
           stack: [
-            { name: 'Apache Airflow', slug: 'apacheairflow' },
-            { name: 'ClickHouse', slug: 'clickhouse' },
-            { name: 'Docker', slug: 'docker' },
-            { name: 'Fly.io', slug: 'flydotio' },
-            { name: 'GitHub Actions', slug: 'githubactions' },
+            {
+              name: 'Python',
+              icon: 'simple-icons:python',
+            },
+            {
+              name: 'FastAPI',
+              icon: 'simple-icons:fastapi',
+            },
+            {
+              name: 'pandas',
+              icon: 'simple-icons:pandas',
+            },
+            {
+              name: 'scikit-learn',
+              icon: 'simple-icons:scikitlearn',
+            },
           ],
         },
         {
-          id: 'tooling',
-          title: 'Tooling',
-          blurb: 'The parts nobody sees, so nothing quietly breaks.',
+          id: 'delivery',
+          title: 'Delivery & Quality',
+          blurb:
+            'PHPUnit testing, version control, and GitHub Actions deployment over SSH.',
           stack: [
-            { name: 'Vitest', slug: 'vitest' },
-            { name: 'Cypress', slug: 'cypress' },
-            { name: 'ESLint', slug: 'eslint' },
-            { name: 'Turborepo', slug: 'turborepo' },
-            { name: 'Storybook', slug: 'storybook' },
+            {
+              name: 'Git',
+              icon: 'simple-icons:git',
+            },
+            {
+              name: 'GitHub Actions',
+              icon: 'simple-icons:githubactions',
+            },
+            {
+              name: 'PHPUnit',
+              icon: 'file-icons:phpunit',
+            },
+            {
+              name: 'Vite',
+              icon: 'simple-icons:vite',
+            },
+          ],
+        },
+        {
+          id: 'design-media',
+          title: 'Design & Media',
+          blurb: 'Interface mockups, community event graphics, and video editing.',
+          stack: [
+            {
+              name: 'Figma',
+              icon: 'simple-icons:figma',
+            },
+            {
+              name: 'Canva',
+              icon: 'simple-icons:canva',
+            },
+            {
+              name: 'CapCut',
+              icon: 'hugeicons:capcut',
+            },
           ],
         },
       ],
+      eyebrow: '$ stack',
     },
-
-    // Invented case studies. Intentional demo content: keep or swap.
-    // Each carries a one-line outcome. `imageSeed` selects a committed local
-    // asset (see the map in `ProjectsSection.vue`); a full path in an optional
-    // `image` field overrides it (use this to drop in a real photo).
     projects: [
       {
-        id: 'ledgerline',
-        title: 'Ledgerline',
-        role: 'Lead fullstack engineer',
-        stack: ['Vue 3', 'Fastify', 'PostgreSQL', 'Redis Streams', 'ClickHouse'],
-        summary: 'Real-time payments reconciliation for a high-volume processor.',
+        id: 'lms-fik-unissula',
+        title: 'LMS FIK UNISSULA',
+        role: 'Paid freelance maintenance',
+        stack: ['Laravel', 'Blade', 'Tailwind CSS', 'Alpine.js', 'MySQL', 'PHPUnit'],
+        summary:
+          'Maintaining and improving an existing learning management system for the Faculty of Nursing at UNISSULA.',
         outcome:
-          'Cut end-of-day reconciliation from 40 minutes to 90 seconds across 2.1M daily transactions.',
+          'Fixed production controller and file-persistence bugs, strengthened route authorization, refactored business logic, and added unit and feature tests.',
         imageSeed: 'ledgerline-pipeline',
+        image: '/images/lms.webp',
+        imageWidth: 1470,
+        imageHeight: 867,
+        imageAlt: 'UNISSULA learning management system interface',
+        imageLabel: 'View LMS FIK UNISSULA image',
       },
       {
-        id: 'atlas-auth',
-        title: 'Atlas Auth',
-        role: 'Backend and developer experience',
-        stack: ['Node.js', 'OAuth 2.1', 'PostgreSQL', 'TypeScript'],
-        summary: 'SSO and session layer for a B2B SaaS platform.',
+        id: 'iuran',
+        title: 'Iuran',
+        role: 'Personal application in use',
+        stack: ['Laravel', 'Vue 3', 'Pinia', 'Tailwind CSS', 'MySQL'],
+        summary:
+          'A Laravel REST API and Vue interface for neighborhood dues, household records, payments, and reports.',
         outcome:
-          'Replaced four bespoke logins with one session layer, halving access-related support tickets.',
+          'Used by two operators to manage records for 74 households, giving the neighborhood head direct access to centralized dues and payment information.',
         imageSeed: 'atlas-auth-flow',
+        image: '/images/iuran.webp',
+        imageWidth: 1147,
+        imageHeight: 696,
+        imageAlt: 'Iuran neighborhood dues administration interface',
+        imageLabel: 'View Iuran image',
       },
       {
-        id: 'fjord-analytics',
-        title: 'Fjord Analytics',
-        role: 'Frontend lead',
-        stack: ['Vue 3', 'dbt', 'DuckDB', 'Tailwind'],
-        summary: 'Self-serve dashboards on top of a warehouse.',
+        id: 'tj-rent-car',
+        title: 'TJ Rent Car',
+        role: 'KKP / internship project',
+        stack: ['Laravel', 'Livewire', 'React', 'MySQL', 'GitHub Actions'],
+        summary:
+          'Independently developed a rental administration system and customer landing page for a car-rental business.',
         outcome:
-          'Let non-engineers build their own cohorts, so the data team stopped taking one-off requests.',
+          'Deployed the React landing page and resolved deployment workflow issues. The administration system uses test data and has not been adopted for daily operations.',
         imageSeed: 'fjord-dashboard',
+        links: [
+          {
+            label: 'Laravel source',
+            href: 'https://github.com/Rizky-Pratama/tj-rent-car-laravel12',
+          },
+          {
+            label: 'React source',
+            href: 'https://github.com/Rizky-Pratama/tj-rent-car-react',
+          },
+        ],
+        image: '/images/tj-rent-car.webp',
+        imageWidth: 1856,
+        imageHeight: 915,
+        imageAlt: 'TJ Rent Car customer website interface',
+        imageLabel: 'View TJ Rent Car image',
       },
       {
-        id: 'undertow',
-        title: 'Undertow',
-        role: 'Solo build',
-        stack: ['Vue 3', 'IndexedDB', 'Workbox', 'Cloudflare Workers'],
-        summary: 'Offline-first field inspection app for remote sites.',
+        id: 'diabpredict',
+        title: 'DiabPredict',
+        role: 'Undergraduate thesis',
+        stack: ['Laravel', 'Livewire', 'FastAPI', 'Python', 'scikit-learn', 'MySQL'],
+        summary:
+          'A diabetes-risk prediction web application connected to a logistic-regression inference service.',
         outcome:
-          'Syncs cleanly through six-hour dead zones and never shows a spinner it cannot honour.',
+          'Integrated Laravel with a Python/FastAPI REST service for prediction inputs, results, and history as an academic early-detection support project.',
         imageSeed: 'undertow-field',
+        links: [
+          {
+            label: 'Web application source',
+            href: 'https://github.com/Rizky-Pratama/diabpredict',
+          },
+          {
+            label: 'Prediction API source',
+            href: 'https://github.com/Rizky-Pratama/diabetes-api',
+          },
+        ],
+        image: '/images/diapredic.webp',
+        imageWidth: 1036,
+        imageHeight: 522,
+        imageAlt: 'DiabPredict login page for the diabetes-risk prediction application',
+        imageLabel: 'View DiabPredict image',
       },
     ],
-
     experience: [
       {
-        period: '2022 - Present',
-        title: 'Independent engineer',
-        org: '',
-        body: 'Three long-running client engagements: a payments reconciliation platform, an analytics workspace, and an offline field app. Own the schema, the API, and the interface.',
+        period: '2024 - Present',
+        title: 'Freelance Web Developer',
+        org: 'Independent / project-based',
+        body: 'Build websites for paying clients on a project basis, primarily developing web applications for academic and learning needs. Selected client engagements include:',
+        engagements: [
+          {
+            period: 'July 2026 - Present',
+            title: 'Freelance Full Stack Developer',
+            org: 'Faculty of Nursing, UNISSULA',
+            body: 'Paid remote work maintaining an existing Laravel LMS. Released bug fixes and refactoring to production, improved authorization and responsive layouts, and developed PHPUnit tests. Continue supporting maintenance and ongoing development.',
+          },
+          {
+            period: 'February 2025 - April 2025',
+            title: 'Web Developer',
+            org: 'CareBuddies',
+            body: 'Independently developed a Laravel and Livewire learning website for a group of final-year nursing students, focused on Swanson Caring Theory. Delivered the website to the client, who used it for nursing education.',
+          },
+        ],
       },
       {
-        period: '2019 - 2022',
-        title: 'Senior fullstack engineer',
-        org: 'Northwind Freight',
-        body: 'Rebuilt the shipment tracking surface and the event pipeline behind it. Cut p95 page load from 4.2s to 1.1s and retired two cron jobs nobody wanted to maintain.',
+        period: 'October 2025 - January 2026',
+        title: 'Full Stack Developer / KKP',
+        org: 'TJ Rent Car',
+        body: 'Independently built the Laravel administration system, React customer landing page, database, and deployment workflow as a KKP project. The landing page is deployed; administration workflows were evaluated with test data.',
       },
       {
-        period: '2017 - 2019',
-        title: 'Backend engineer',
-        org: 'Bellweather Health',
-        body: 'Built the patient-record sync service and its audit trail. Learned more about idempotency than I expected to.',
-      },
-      {
-        period: '2013 - 2017',
-        title: 'BS Computer Science',
-        org: 'University of Lagos',
-        body: 'Thesis on incremental view maintenance. Mostly databases, which turned out to be a career.',
+        period: 'September 2022 - August 2026',
+        title: 'Bachelor of Informatics (S.Kom.)',
+        org: 'Universitas Indraprasta PGRI',
+        body: 'Graduated with a GPA of 3.43/4.00. Completed a thesis integrating a Laravel application with a logistic-regression prediction service built with Python and FastAPI.',
       },
     ],
-
     about: {
-      heading: 'I like boring infrastructure and interfaces people forget to notice.',
-      body: 'I started in data engineering, moved toward the product surface, and never picked a side. Most of my work is glue: event pipelines, Postgres schemas that survive migrations, and Vue frontends that stay fast when the dataset grows. I care about the unglamorous parts, because that is where products quietly succeed or quietly fall over.',
+      heading: 'Practical software, built around everyday needs.',
+      body: 'I am an Informatics graduate focused on full-stack web development. My work includes maintaining a paid client LMS, building a neighborhood dues application, and connecting web interfaces to APIs and machine-learning services. I enjoy tracing bugs through application logic and data, then making the code easier to maintain. Outside development, I have helped organize community events, coordinate volunteers, and digitize registrations.',
+      nowHeading: 'Now',
       now: [
-        'Writing a Postgres logical-replication series',
-        'Maintaining two open-source Vue composables',
-        'Learning Rust, slowly, on weekends',
+        'Maintaining and improving the UNISSULA LMS',
+        'Operating Iuran for neighborhood dues administration',
+        'Seeking a full-time software or web development role',
       ],
       portrait: {
-        src: '/images/portrait-640.webp',
-        srcset: '/images/portrait-640.webp 1x, /images/portrait-900.webp 1.4x',
-        alt: 'Portrait',
+        src: '/images/about-three-quarter.webp',
+        srcset: '',
+        alt: 'Muhammad Rizky Pratama in a three-quarter portrait',
       },
-      // TODO: swap with your real numbers. `{YEARS}` renders as a neutral
-      // placeholder so no tenure is invented on your behalf.
       readouts: [
-        { value: '{YEARS}', label: 'years shipping' },
-        { value: '40+', label: 'production releases' },
-        { value: '3', label: 'time zones' },
+        {
+          value: '74',
+          label: 'Households managed in Iuran',
+        },
+        {
+          value: '2',
+          label: 'Iuran application operators',
+        },
       ],
     },
-
     work: {
       heading: 'Selected work',
-      intro: 'Four systems, with the outcome each one was built to reach.',
+      intro:
+        'Paid maintenance, a personal application in use, and two academic projects.',
+      viewer: {
+        close: 'Close',
+        zoom: 'Zoom in',
+        fit: 'Fit image',
+        pan: 'Project image. Scroll to explore when zoomed.',
+        error: 'This image could not be loaded.',
+        original: 'Open original image',
+      },
     },
-
     contact: {
-      heading: 'I have room for one more project this quarter.',
-      body: 'If you are building something that has to hold up under real load, tell me what it is. I read every message and reply within two working days.',
-      secondary: { label: 'Download CV', href: '/cv.pdf' },
+      heading: 'Let’s discuss your next developer opening.',
+      body: 'I am available for full-time developer roles and open to freelance projects. Get in touch to discuss your team or application.',
+      secondary: {
+        label: 'Download CV',
+        href: '',
+      },
       links: [
         {
-          label: 'hello@example.com',
-          href: 'mailto:hello@example.com',
-          icon: 'envelope-simple',
+          label: 'muhammadrizkyprtm2308@gmail.com',
+          href: 'mailto:muhammadrizkyprtm2308@gmail.com',
+          icon: 'ph:envelope-simple',
         },
         {
-          label: 'github.com/your-handle',
-          href: 'https://github.com/your-handle',
-          icon: 'github-logo',
+          label: 'GitHub',
+          href: 'https://github.com/Rizky-Pratama',
+          icon: 'ph:github-logo',
         },
         {
-          label: 'linkedin.com/in/your-handle',
-          href: 'https://linkedin.com/in/your-handle',
-          icon: 'linkedin-logo',
+          label: 'LinkedIn',
+          href: 'https://www.linkedin.com/in/rizkyprtm/',
+          icon: 'ph:linkedin-logo',
+        },
+        {
+          label: 'Instagram',
+          href: 'https://www.instagram.com/rizkyprtm___/',
+          icon: 'ph:instagram-logo',
+        },
+        {
+          label: 'Threads',
+          href: 'https://www.threads.com/@rizkyprtm___',
+          icon: 'simple-icons:threads',
         },
       ],
       note: 'No contact form. This goes straight to my inbox.',
     },
-
     footer: {
       colophon:
         'Built with Vue 3, Tailwind, and GSAP. Typeset in Space Grotesk, IBM Plex Sans, and JetBrains Mono.',
       legal: '(c) 2026',
+      copyright: '(c) 2026 Muhammad Rizky Pratama',
     },
+    experienceHeading: 'Experience & Education',
+  },
+  seo: {
+    title: 'Muhammad Rizky Pratama | Full Stack Developer',
+    description:
+      'Full Stack Developer working with Laravel, Vue, MySQL, REST APIs, and PHPUnit. Explore paid maintenance work and practical web projects.',
+    image: '/og-banner.png',
+    imageAlt:
+      'Muhammad Rizky Pratama, Full Stack Developer. Web applications, from interface to database.',
+  },
+  icons: {
+    menu: 'ph:list',
+    arrowDown: 'ph:arrow-down',
+    arrowUp: 'ph:arrow-up',
+    download: 'ph:download-simple',
+    email: 'ph:envelope-simple',
+    github: 'ph:github-logo',
+    linkedin: 'ph:linkedin-logo',
+    favicon: 'ph:code',
+    instagram: 'ph:instagram-logo',
+    threads: 'simple-icons:threads',
   },
 }
-
-/**
- * Data-side fix for the footer trailing-space nit.
- * `SiteFooter.vue` renders `{{ legal }} {{ name }}`, which leaves a dangling
- * space when `name` is empty. This single pre-composed, trimmed string is
- * safe to render alone. Footer owner: render `{{ copyright }}` only.
- */
-site.sections.footer.copyright = [site.sections.footer.legal, site.name]
-  .filter((part) => part && String(part).trim())
-  .join(' ')
-  .trim()
 
 export default site

@@ -119,6 +119,19 @@ useContextGsap(
             >
               {{ entry.body }}
             </p>
+            <ul v-if="entry.engagements?.length" class="mt-6 flex flex-col gap-6">
+              <li v-for="engagement in entry.engagements" :key="engagement.org">
+                <h4 class="font-display text-base font-medium text-fg">
+                  {{ engagement.org }}
+                </h4>
+                <p class="mt-1 font-mono text-xs text-fg-muted">
+                  {{ engagement.period }}
+                </p>
+                <p class="mt-2 max-w-[62ch] text-base leading-relaxed text-fg-muted">
+                  {{ engagement.body }}
+                </p>
+              </li>
+            </ul>
           </div>
         </li>
       </ol>

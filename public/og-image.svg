@@ -4,9 +4,9 @@
   height="630"
   viewBox="0 0 1200 630"
   role="img"
-  aria-label="Fullstack Developer Portfolio"
+  aria-label="Muhammad Rizky Pratama | Full Stack Developer"
 >
-  <title>Fullstack Developer Portfolio</title>
+  <title>Muhammad Rizky Pratama | Full Stack Developer</title>
 
   <!-- Palette mirrors src/style.css @theme (dark-only). -->
   <defs>
@@ -45,7 +45,7 @@
     font-family="'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
     font-size="24"
     letter-spacing="2"
-  >$ whoami</text>
+  >Muhammad Rizky Pratama</text>
 
   <!-- Headline: the role, as the big line -->
   <text
@@ -56,7 +56,7 @@
     font-size="104"
     font-weight="600"
     letter-spacing="-2"
-  >Fullstack Developer</text>
+  >Full Stack Developer</text>
 
   <!-- Tagline -->
   <text
@@ -65,7 +65,7 @@
     fill="#94A3B8"
     font-family="'IBM Plex Sans Variable', 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif"
     font-size="32"
-  >Interfaces and the APIs behind them, built to hold up under production load.</text>
+  >Web applications, from interface to database.</text>
 
   <!-- Mono accent detail, bottom band -->
   <line
@@ -84,7 +84,7 @@
     font-family="'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
     font-size="22"
     letter-spacing="1"
-  >Vue 3 · Tailwind · GSAP</text>
+  >Laravel / Vue / MySQL</text>
 
   <text
     x="1120"
@@ -94,5 +94,5 @@
     font-family="'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
     font-size="22"
     letter-spacing="1"
-  >1200 x 630</text>
+  >Portfolio</text>
 </svg>

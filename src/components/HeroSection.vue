@@ -1,14 +1,16 @@
 <script setup>
+import AppIcon from './AppIcon.vue'
 import { computed, ref } from 'vue'
 import { useContextGsap, EASE, DUR } from '../composables/useGsap'
 
 const props = defineProps({
+  icon: { type: String, default: '' },
   eyebrow: { type: String, default: '$ whoami' },
   heading: { type: String, default: '' },
   subtext: { type: String, default: '' },
   portrait: {
     type: Object,
-    default: () => ({ src: '/images/portrait-900.webp', srcset: '', alt: 'Portrait' }),
+    default: () => ({ src: '/images/my-foto.webp', srcset: '', alt: 'Portrait' }),
   },
   ctaLabel: { type: String, default: 'Start a conversation' },
   ctaHref: { type: String, default: '#' },
@@ -119,19 +121,11 @@ useContextGsap(
           class="group inline-flex items-center gap-2 font-body text-sm font-medium text-fg transition-colors duration-160 ease-out-strong hover:text-accent"
         >
           {{ secondaryLabel }}
-          <svg
+          <AppIcon
             data-cta-arrow
-            viewBox="0 0 24 24"
-            class="h-4 w-4 transition-transform duration-200 ease-out-strong"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 5v14M19 12l-7 7-7-7" />
-          </svg>
+            :name="icon"
+            class="transition-transform duration-200 ease-out-strong"
+          />
         </a>
       </div>
     </div>
@@ -140,18 +134,21 @@ useContextGsap(
     <div class="lg:col-span-5 lg:mt-16">
       <div class="relative flex items-stretch gap-4">
         <span data-hero-rule aria-hidden="true" class="w-px shrink-0 bg-accent"></span>
-        <img
-          data-hero-portrait
-          :src="portraitSrc"
-          :srcset="portraitSrcset"
-          sizes="(min-width: 1024px) 40vw, 100vw"
-          :alt="portrait.alt"
-          width="900"
-          height="1125"
-          fetchpriority="high"
-          decoding="async"
-          class="aspect-[4/5] w-full rounded-md object-cover"
-        />
+        <div class="portrait-frame" data-hero-portrait>
+          <div class="portrait-hover">
+            <img
+              :src="portraitSrc"
+              :srcset="portraitSrcset"
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              :alt="portrait.alt"
+              width="900"
+              height="1125"
+              fetchpriority="high"
+              decoding="async"
+              class="aspect-[4/5] w-full object-cover"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </section>

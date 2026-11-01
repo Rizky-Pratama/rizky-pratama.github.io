@@ -1,8 +1,10 @@
 <script setup>
+import AppIcon from './AppIcon.vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useContextGsap, EASE } from '../composables/useGsap'
 
 const props = defineProps({
+  icon: { type: String, default: '' },
   name: { type: String, default: '' },
   nav: { type: Array, default: () => [] },
   ctaLabel: { type: String, default: 'Start a conversation' },
@@ -150,13 +152,13 @@ const wordmark = computed(() =>
     >
       <a
         href="#top"
-        class="font-display text-base font-semibold tracking-tight text-fg transition-colors duration-200 ease-out-strong hover:text-accent"
+        class="max-w-[65%] font-display text-sm font-semibold tracking-tight text-fg transition-colors duration-200 ease-out-strong hover:text-accent"
       >
         {{ wordmark }}
       </a>
 
-      <div class="hidden items-center gap-8 lg:flex">
-        <div class="relative flex items-center gap-7">
+      <div class="hidden items-center gap-4 lg:flex">
+        <div class="relative flex items-center gap-4">
           <a
             v-for="item in nav"
             :key="item.href"
@@ -192,17 +194,7 @@ const wordmark = computed(() =>
         aria-label="Menu"
         @click="menuOpen = !menuOpen"
       >
-        <svg
-          viewBox="0 0 24 24"
-          class="h-5 w-5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <path d="M4 7h16M4 12h16M4 17h16" />
-        </svg>
+        <AppIcon :name="props.icon" />
       </button>
     </nav>
 

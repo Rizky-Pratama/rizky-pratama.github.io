@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from './AppIcon.vue'
 /**
  * SiteFooter - mono meta band (PLAN 3.8)
  *
@@ -14,6 +15,7 @@ import { ref } from 'vue'
 import { useContextGsap, useReducedMotion } from '../composables/useGsap.js'
 
 const props = defineProps({
+  icon: { type: String, default: '' },
   name: { type: String, default: '' },
   role: { type: String, default: '' },
   location: { type: String, default: '' },
@@ -81,7 +83,7 @@ useContextGsap(
 function buildElsewhere() {
   const social = props.social || {}
   const out = []
-  const order = ['github', 'linkedin', 'x', 'dribbble']
+  const order = ['github', 'linkedin', 'instagram', 'threads', 'x', 'dribbble']
 
   for (const key of order) {
     const href = social[key]
@@ -93,7 +95,14 @@ function buildElsewhere() {
 const elsewhere = buildElsewhere()
 
 const labelFor = (key) =>
-  ({ github: 'GitHub', linkedin: 'LinkedIn', x: 'X', dribbble: 'Dribbble' })[key] ?? key
+  ({
+    github: 'GitHub',
+    linkedin: 'LinkedIn',
+    instagram: 'Instagram',
+    threads: 'Threads',
+    x: 'X',
+    dribbble: 'Dribbble',
+  })[key] ?? key
 
 const isExternal = (href) => /^https?:\/\//.test(href)
 </script>
@@ -168,17 +177,7 @@ const isExternal = (href) => /^https?:\/\//.test(href)
         href="#main"
         class="inline-flex items-center gap-1.5 text-fg-muted transition-colors duration-200 ease-out-strong hover:text-fg focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
       >
-        <svg
-          class="size-3.5"
-          viewBox="0 0 256 256"
-          fill="currentColor"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            d="M205.66 117.66a8 8 0 0 1-11.32 0L136 59.31V216a8 8 0 0 1-16 0V59.31l-58.34 58.35a8 8 0 0 1-11.32-11.32l72-72a8 8 0 0 1 11.32 0l72 72a8 8 0 0 1 0 11.32Z"
-          />
-        </svg>
+        <AppIcon :name="props.icon" />
         <span>Back to top</span>
       </a>
     </div>

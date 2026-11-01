@@ -36,11 +36,17 @@
     "@fontsource-variable/ibm-plex-sans": "^5.3.0",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@iconify/vue": "^5.0.4",
     "gsap": "^3.15.0",
     "vue": "^3.5.42"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@iconify-json/file-icons": "^1.2.2",
+    "@iconify-json/hugeicons": "^1.2.35",
+    "@iconify-json/ph": "^1.2.2",
+    "@iconify-json/simple-icons": "^1.2.101",
+    "@iconify/utils": "^3.1.7",
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-vue": "^6.0.10",
     "@vue/test-utils": "^2.5.1",
@@ -51,7 +57,6 @@
     "playwright": "^1.64.0",
     "prettier": "^3.9.10",
     "sharp": "^0.35.5",
-    "simple-icons": "^16.35.0",
     "tailwindcss": "^4.3.3",
     "vite": "^8.3.0",
     "vitest": "^5.0.3"

@@ -6,7 +6,7 @@
  *   - AppButton is an <a> when href is set, else a <button>, with the right
  *     disabled/external-target handling.
  *   - TechChip points its icon at the committed local asset
- *     `/icons/${slug}.svg` (never a CDN), and is an <a> only with an href.
+ *     bundled Iconify data (never a CDN), and is an <a> only with an href.
  */
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
@@ -40,9 +40,9 @@ describe('AppButton', () => {
     expect(w.attributes('aria-disabled')).toBe('true')
   })
 
-  it('renders the download icon svg only when icon="download"', () => {
+  it('renders the download icon svg only when icon="ph:download-simple"', () => {
     const withIcon = mount(AppButton, {
-      props: { label: 'CV', href: '/cv.pdf', icon: 'download' },
+      props: { label: 'CV', href: '/cv.pdf', icon: 'ph:download-simple' },
     })
     expect(withIcon.find('svg').exists()).toBe(true)
 
@@ -57,18 +57,18 @@ describe('AppButton', () => {
 })
 
 describe('TechChip', () => {
-  it('renders a <span> and points the icon at the local committed path', () => {
-    const w = mount(TechChip, { props: { name: 'Vue 3', slug: 'vuedotjs' } })
+  it('renders a chip with a bundled Iconify SVG', () => {
+    const w = mount(TechChip, { props: { name: 'Vue 3', icon: 'simple-icons:vuedotjs' } })
     expect(w.element.tagName).toBe('SPAN')
     expect(w.attributes('data-ui-chip')).toBeDefined()
-    expect(w.find('img').attributes('src')).toBe('/icons/vuedotjs.svg')
+    expect(w.find('svg').attributes('data-icon')).toBe('simple-icons:vuedotjs')
     expect(w.text()).toBe('Vue 3')
     expect(w.find('[data-ui-chip-label]').exists()).toBe(true)
   })
 
   it('renders an <a> with safe rel for external hrefs', () => {
     const w = mount(TechChip, {
-      props: { name: 'Vue 3', slug: 'vuedotjs', href: 'https://vuejs.org' },
+      props: { name: 'Vue 3', icon: 'simple-icons:vuedotjs', href: 'https://vuejs.org' },
     })
     expect(w.element.tagName).toBe('A')
     expect(w.attributes('href')).toBe('https://vuejs.org')
@@ -76,9 +76,9 @@ describe('TechChip', () => {
     expect(w.attributes('rel')).toBe('noopener noreferrer')
   })
 
-  it('renders no broken icon src when slug is empty', () => {
+  it('renders no broken icon src when icon is empty', () => {
     const w = mount(TechChip, { props: { name: 'Mystery' } })
-    // Empty slug -> empty src, so no stray request for /icons/.svg
-    expect(w.find('img').attributes('src')).toBe('')
+    // Empty icon renders text only, with no image request.
+    expect(w.find('svg').exists()).toBe(false)
   })
 })
