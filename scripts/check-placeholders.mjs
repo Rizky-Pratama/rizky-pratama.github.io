@@ -6,7 +6,6 @@
  * Scans (gitignore-aware):
  *   - index.html
  *   - src/**\/*.{js,vue,css}
- *   - public/robots.txt
  *   - LICENSE
  * plus a direct read of src/data/site.js for the empty `site.name`. Documentation
  * (*.md), build output (dist/), QA scratch (audit/) and tests (*.test.js) are

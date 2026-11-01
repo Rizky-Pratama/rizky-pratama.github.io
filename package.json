@@ -2,15 +2,14 @@
   "name": "portofoio",
   "private": true,
   "version": "0.0.0",
-  "description": "Single-page dark developer portfolio template built with Vue 3, Vite, Tailwind CSS v4 and GSAP (no router).",
+  "description": "Muhammad Rizky Pratama portfolio built with Vue, Vite, Tailwind CSS and GSAP.",
   "license": "MIT",
   "keywords": [
     "vue",
     "vite",
     "tailwindcss",
     "gsap",
-    "portfolio",
-    "template"
+    "portfolio"
   ],
   "engines": {
     "node": ">=20.19"
@@ -20,13 +19,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "images": "node scripts/gen-images.mjs",
     "icons": "node scripts/gen-icons.mjs",
-    "audit": "node audit/scripts/run-audit.mjs",
     "check:placeholders": "node scripts/check-placeholders.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "watch:popups": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/watch-console-popups.ps1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",

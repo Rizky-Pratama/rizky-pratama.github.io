@@ -27,7 +27,6 @@ export default [
       'audit/**',
       'public/**',
       'scripts/**',
-      'design-system/**',
       '*.config.js',
       'eslint.config.js',
       'prettier.config.js',

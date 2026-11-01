@@ -5,7 +5,7 @@
  * THEME LOCK: dark-only. There is deliberately NO `@custom-variant dark`
  * and NO light palette. Every token below IS the dark value, `color-scheme`
  * is pinned to `dark`, and no section inverts. This is a recorded decision
- * (see PLAN.md Section 0, finding P0-3), not an omission. If a light mode is
+ * (see PLAN.md), not an omission. If a light mode is
  * ever wanted it must be reintroduced intentionally as a variant + token set.
  * =========================================================================== */
 

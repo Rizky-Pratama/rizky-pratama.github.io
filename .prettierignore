@@ -11,9 +11,6 @@ public/
 # QA scratch output (screenshots, reports, audit scripts)
 audit/
 
-# Design-system reference material
-design-system/
-
 # Tooling scripts (not part of the app style surface)
 scripts/
 

@@ -1,6 +1,6 @@
 <script setup>
 /**
- * SkillsSection - bento field (PLAN 3.3)
+ * SkillsSection - bento field (see PLAN.md)
  *
  * Layout: lg:grid-cols-12, four tiles at col-span 5 / 7 / 7 / 5.
  * Visual variation on 2 of 4 cells: tile 2 (index 1) gets the surface-2 tint

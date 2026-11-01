@@ -1,127 +1,61 @@
 # AGENTS.md
 
-Portable, tool-agnostic guide for automated assistants working in this repo. It describes
-what the project is, the commands to use, and the conventions that are already locked. A
-sibling file, `CLAUDE.md`, carries Claude-specific guidance; where the two overlap they
-agree.
+Portable guidance for automated assistants working in this repository.
 
-## What this project is
+## Project
 
-`portofoio` is a **single-page dark developer-portfolio TEMPLATE** built with
-**Vue 3.5 + Vite 8 + Tailwind CSS v4 + GSAP 3** (installed versions, not aspirational).
-
-- One page, six content sections (Hero, Skills, Projects, Experience, About, Contact) plus
-  a fixed nav and a mono-meta footer.
-- **No client-side router** — the whole site is anchor links on one page.
-- **No contact form** — by design. The primary CTA is `mailto:` plus external links.
-- The content is **personalized for Muhammad Rizky Pratama**. Identity and factual copy
-  are configured in one data file
-  (`src/data/site.js`).
-
-The original template is now personalized. README.md describes preview-only SEO and the optional CV download.
-
-## Requirements
-
-- **Node.js >= 20.19** (required by `vite@8`; `package.json` `engines` enforces it)
-- npm (the committed `package-lock.json` is npm-format)
-
-There is no separate Tailwind config or PostCSS config: Tailwind v4 is CSS-first and runs
-through the `@tailwindcss/vite` plugin.
+Personal portfolio for Muhammad Rizky Pratama, built with Vue 3.5, Vite 8, Tailwind CSS v4 and GSAP 3. Six sections on one page, anchor navigation, no router and no contact form. Published to https://rizky-pratama.github.io/ through GitHub Actions.
 
 ## Commands
 
-```bash
-npm install        # install dependencies (first time only)
-npm run dev        # dev server (Vite, default http://localhost:5173)
-npm run build      # production build -> dist/
-npm run preview    # serve the built dist/ locally to sanity-check it
-```
-
-Quality gates — these must stay green:
+Use Node.js >=20.19 and npm with the committed package-lock.json. Node 22 is used for deployment; CI also checks 20.19. jsdom 27 preserves that compatibility.
 
 ```bash
-npm test           # Vitest suite, run once
-npm run lint       # ESLint over the repo (must exit 0)
-npm run format:check # Prettier check, writes nothing
+npm ci
+npm run dev
+npm test
+npm run lint
+npm run format:check
+npm run check:placeholders
+npm run build
+npm run preview
 ```
 
-Pre-publish guard:
+Tests, lint, formatting, placeholder guard and build must pass. The placeholder guard scans index.html, src source files and LICENSE; it does not certify deployment/indexing readiness.
 
-```bash
-npm run check:placeholders   # scans index.html, src/, public/robots.txt,
-                             # LICENSE (the sitemap is deferred until the final URL is known) for leftover
-                             # placeholder values (example.com, your-handle,
-                             # {AVAILABILITY}, {YEARS}, empty site.name).
-                             # Exits NON-ZERO until they are all replaced.
-                             # ALLOW_PLACEHOLDERS=1 downgrades them to warnings
-                             # (exit 0) when shipping the demo content on purpose.
-```
+`npm run icons` regenerates the offline icon registry, site icons and license notices from installed collections and cached license texts. Commit generated outputs. Playwright is available for browser QA; keep scratch captures in ignored audit/. Do not depend on an uncommitted audit harness.
 
-Maintainer-only tooling (not needed to develop, build, or deploy):
+## Conventions
 
-```bash
-npm run images     # regenerate public/images/*.webp from scripts/gen-images.mjs (deterministic, offline)
-npm run icons      # regenerate Iconify registry, site icons, and notices (deterministic, offline)
-npm run audit      # optional visual audit; requires playwright + a running `npm run preview`,
-                   # and the gitignored local audit/ harness (absent on a fresh clone)
-```
+- Read PLAN.md before visual work; it is the authoritative current design contract. User instructions take precedence.
+- Vue script setup, plain-object props, no TypeScript. Shared primitives live in src/components/ui.js.
+- All editable content belongs in src/data/site.js; App.vue passes it as props.
+- Tailwind v4 CSS-first via @tailwindcss/vite. Use theme utilities; arbitrary CSS variables use bg-(--color-surface), never bg-[--color-surface]. No Tailwind/PostCSS config files needed.
+- Prettier: single quotes, no semicolons, 2 spaces, trailing commas, printWidth 90, LF.
+- GSAP registration and matchMedia ownership belong only in src/composables/useGsap.js. Dispose animations, observers and listeners on unmount; respect reduced motion.
+- Dark-only, one green accent #22C55E, no gradients or glow. Dials: variance 5, motion 6, density 4.
+- Local images, fonts and offline icons only. AppIcon uses @iconify/vue/offline with src/data/icons.js. Keep icon attribution and license notices.
+- Preserve the existing uncommitted user work. Do not deploy or push unless authorized in the current task context.
 
-## Key conventions
+## Key files
 
-- **Vue 3 `<script setup>`** SFCs; shared primitives are a plain-ESM module,
-  `src/components/ui.js`.
-- **Plain-object props** — no TypeScript in this project.
-- **Tailwind v4 theme utilities only.** Use generated utilities (`bg-surface`,
-  `text-fg-muted`, `border-border`, `text-accent`, `font-display`, `rounded-sm`, ...). If
-  an arbitrary value is ever needed, use the v4 shorthand `bg-(--color-surface)` — **never**
-  the v3 form `bg-[--color-surface]`.
-- **Prettier style:** single quotes, **no semicolons**, 2-space indent, trailing commas,
-  `printWidth: 90`, LF. Enforced by `npm run format:check` (see `prettier.config.js`).
-- **GSAP only through `src/composables/useGsap.js`** — it is the single plugin
-  registration point (`ScrollTrigger`, `Flip`, `SplitText`) and the single `matchMedia`
-  owner. Sections pass config; they never register plugins or media queries themselves.
-- **ALL content lives in `src/data/site.js`.** `App.vue` passes those values into the
-  section components as props. Components hold no copy.
-- **Local assets only** — images, icons, and fonts are committed / self-hosted
-  (`public/images/*.webp`, `src/data/icons.js`, `@fontsource-variable/*`). No runtime CDN
-  or Google Fonts request.
+| Path | Purpose |
+| --- | --- |
+| src/data/site.js | Identity, copy, links, navigation and asset configuration |
+| src/components/ | Sections, navigation/footer, image viewer and UI primitives |
+| src/composables/useGsap.js | GSAP, ScrollTrigger, presets, lifecycle and motion helpers |
+| src/style.css | Theme tokens and shared styles |
+| scripts/ | Icon generation, cached licenses, SEO and placeholder guard |
+| .github/workflows/ | CI and Pages deployment |
+| public/ | Local images, social card, icons and license notice |
+| PLAN.md | Current design contract |
+| README.md | Development, content and deployment instructions |
 
-## Design law
+## Intentional lint warnings
 
-`PLAN.md` is **authoritative for visual work** — read it before making any visual change.
-The locked facts, summarized (do not contradict them):
+Lint exits 0 with exactly two warnings. Do not fix these as incidental cleanup:
 
-- **Dark-only.** `color-scheme: dark` is pinned; there is no light variant and no theme
-  toggle. `src/style.css` carries no `@custom-variant dark`.
-- **One accent: `#22C55E`.** No second saturated hue, no glow, no gradient.
-- **Three dials: `DESIGN_VARIANCE` 5 / `MOTION_INTENSITY` 6 / `VISUAL_DENSITY` 4.**
+- ContactSection.vue: vue/no-dupe-keys, the local links list shares the prop name.
+- useGsap.js: no-useless-assignment, the deliberate register-once guard.
 
-Tokens (colors, radius, the four easing curves, durations, z-index scale) are defined in
-`src/style.css` and documented in `README.md` → "Design system". Note that
-`--radius-xs/sm/md` intentionally override Tailwind's built-in radius scale project-wide.
-
-## Where to look
-
-| Path | What it holds |
-|---|---|
-| `src/data/site.js` | **All content.** The single content source of truth. |
-| `src/components/` | `SiteNav`, `SiteFooter`, the six section SFCs, and `ui.js` (`AppButton` + `TechChip`). |
-| `src/composables/useGsap.js` | Single GSAP registration point + `matchMedia` owner; easing/duration/stagger presets. |
-| `src/style.css` | `@theme` design tokens (dark-only palette, fonts, radius, easing) + base/components. |
-| `src/App.vue` | Section assembly, skip link, `ScrollTrigger.refresh()`. |
-| `scripts/` | Maintainer generators: `gen-images.mjs`, `gen-icons.mjs`, and the `check-placeholders.mjs` guard. |
-| `public/` | Copied verbatim to `dist/`: images, icons, `cv.pdf`, OG card, `robots.txt`, `sitemap.xml`. |
-| `PLAN.md` | Locked design/stack plan — authoritative for visual work. |
-
-`audit/` is gitignored QA scratch and is not shipped; `design-system/` is reference
-material. `README.md` covers what to replace when cloning the template.
-
-## Known, intentional lint warnings
-
-`npm run lint` exits 0 but reports exactly **two warnings**, both **by design** — do not
-"fix" them:
-
-- `src/components/ContactSection.vue` — `vue/no-dupe-keys`
-- `src/composables/useGsap.js` — `no-useless-assignment`
-
-See `CLAUDE.md` for Claude-specific guidance.
+CLAUDE.md points to this shared guidance rather than maintaining a second copy.

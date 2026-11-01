@@ -1,7 +1,7 @@
 <script setup>
 import AppIcon from './AppIcon.vue'
 /**
- * SiteFooter - mono meta band (PLAN 3.8)
+ * SiteFooter - mono meta band (see PLAN.md)
  *
  * lg:grid-cols-4: (1) name + role, (2) sitemap anchors, (3) elsewhere links,
  * (4) colophon. The single permitted location mention lives here on the
